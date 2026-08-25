@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air One Aero — Convoyage de véhicules et développement d'applications</title>
+<meta name="description" content="Convoyage de véhicules et développement d'applications sur mesure, par un pilote de ligne. Air One Aero, Erwan Cellerier.">
+<link rel="icon" href="mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#041D2E;
+  --panel:#002841;
+  --bone:#EDEAE1;
+  --brass:#C2A878;
+  --slate:#7D93A4;
+  --rule:rgba(237,234,225,.15);
+  --pad:clamp(1.5rem,6vw,7rem);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--night);
+  color:var(--bone);
+  font-family:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:clamp(1rem,.95rem + .2vw,1.0625rem);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+
+/* ---------- vocabulaire typographique ---------- */
+.tag{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:.6875rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--slate);
+}
+.serif{
+  font-family:'Instrument Serif',Georgia,'Times New Roman',serif;
+  font-weight:400;
+  line-height:1.04;
+  letter-spacing:-.015em;
+}
+
+/* ---------- barre ---------- */
+header{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1.75rem var(--pad);
+}
+header .tag{color:var(--bone);letter-spacing:.3em}
+header a.tag{color:var(--slate);text-decoration:none;transition:color .3s}
+header a.tag:hover,header a.tag:focus-visible{color:var(--brass)}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:clamp(3rem,11vh,7rem) var(--pad) clamp(4rem,12vh,8rem);
+  max-width:1180px;
+}
+.hero h1{
+  margin:1.75rem 0 0;
+  font-size:clamp(2.9rem,10.5vw,7.5rem);
+}
+.hero h1 .dim{color:var(--slate)}
+.hero p.lede{
+  margin:2.25rem 0 0;
+  max-width:37ch;
+  color:var(--bone);
+  opacity:.82;
+  font-size:clamp(1.0625rem,1rem + .4vw,1.25rem);
+}
+
+/* ---------- le bandeau : signature ---------- */
+.strip{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:clamp(.9rem,2.5vw,1.75rem);
+  margin:2.5rem 0 0;
+}
+.strip .pt{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.6875rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--brass);
+  white-space:nowrap;
+}
+.strip .line{position:relative;height:1px;background:var(--rule)}
+.strip .line::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--brass),rgba(194,168,120,.25));
+  transform:scaleX(0);transform-origin:left;
+  animation:draw 1.5s cubic-bezier(.2,.7,.2,1) forwards;
+}
+.strip .line::after{
+  content:'';position:absolute;right:-1px;top:-2.5px;
+  width:6px;height:6px;border-right:1px solid var(--brass);border-top:1px solid var(--brass);
+  transform:rotate(45deg) scale(0);
+  animation:tip .5s ease-out 1.15s forwards;
+}
+@keyframes draw{to{transform:scaleX(1)}}
+@keyframes tip{to{transform:rotate(45deg) scale(1)}}
+
+/* ---------- prestations ---------- */
+.work{border-top:1px solid var(--rule)}
+.item{
+  padding:clamp(3rem,8vh,5.5rem) var(--pad);
+  border-bottom:1px solid var(--rule);
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:1.25rem;
+  max-width:1180px;
+}
+.item h2{
+  margin:0;
+  font-size:clamp(1.9rem,5.5vw,3.4rem);
+}
+.item .body{max-width:52ch;color:var(--bone);opacity:.8;margin:0}
+.item .body + .body{margin-top:1rem}
+.item .for{margin-top:1.5rem}
+.proof{
+  margin-top:1.75rem;
+  display:inline-flex;align-items:baseline;gap:.6rem;
+  text-decoration:none;
+  border-bottom:1px solid var(--rule);
+  padding-bottom:.35rem;
+  transition:border-color .3s;
+}
+.proof:hover,.proof:focus-visible{border-color:var(--brass)}
+.proof .lbl{font-family:'IBM Plex Mono',monospace;font-size:.6875rem;letter-spacing:.22em;text-transform:uppercase;color:var(--slate)}
+.proof .val{color:var(--bone)}
+.proof:hover .val{color:var(--brass)}
+
+/* ---------- contact ---------- */
+.contact{
+  padding:clamp(4rem,13vh,8rem) var(--pad);
+  background:var(--panel);
+}
+.contact .inner{max-width:1180px}
+.contact h2{margin:1.5rem 0 0;font-size:clamp(1.6rem,5vw,3rem)}
+.mail{
+  display:inline-block;
+  margin-top:2rem;
+  font-family:'Instrument Serif',Georgia,serif;
+  font-size:clamp(1.35rem,4.6vw,2.6rem);
+  letter-spacing:-.01em;
+  color:var(--bone);
+  text-decoration:none;
+  border-bottom:1px solid rgba(194,168,120,.45);
+  padding-bottom:.15em;
+  transition:color .3s,border-color .3s;
+  word-break:break-word;
+}
+.mail:hover,.mail:focus-visible{color:var(--brass);border-color:var(--brass)}
+
+/* ---------- pied ---------- */
+footer{
+  padding:2.5rem var(--pad) 3.5rem;
+  display:flex;flex-wrap:wrap;gap:1rem 2.5rem;align-items:center;
+}
+footer img{height:44px;width:auto;opacity:.55}
+footer .tag{color:var(--slate)}
+
+@media(min-width:900px){
+  .item{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(2rem,5vw,5rem)}
+  .item .head{grid-row:span 2}
+  .item .strip{margin-top:1.75rem}
+}
+:focus-visible{outline:2px solid var(--brass);outline-offset:4px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .strip .line::before{transform:scaleX(1)}
+  .strip .line::after{transform:rotate(45deg) scale(1)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="tag">Air One Aero</span>
+  <a class="tag" href="#contact">Contact</a>
+</header>
+
+<section class="hero">
+  <span class="tag">Erwan Cellerier</span>
+  <h1 class="serif">Livrer à l'heure.<br><span class="dim">Sans surprise.</span></h1>
+  <p class="lede">Deux prestations, une seule habitude de travail : tout préparer en amont, pour que rien ne se décide dans l'urgence.</p>
+  <div class="strip" aria-hidden="true">
+    <span class="pt">Préparer</span>
+    <span class="line"></span>
+    <span class="pt">Livrer</span>
+  </div>
+</section>
+
+<main class="work">
+
+  <article class="item">
+    <div class="head">
+      <h2 class="serif">Convoyage de véhicules</h2>
+      <div class="strip" aria-hidden="true">
+        <span class="pt">Prise en charge</span>
+        <span class="line"></span>
+        <span class="pt">Livraison</span>
+      </div>
+    </div>
+    <div>
+      <p class="body">Votre véhicule rejoint sa destination conduit par un professionnel, avec un point de départ et une heure d'arrivée convenus à l'avance. Vous savez où il est et quand il arrive.</p>
+      <p class="body">Concessions, loueurs, particuliers. France entière.</p>
+    </div>
+  </article>
+
+  <article class="item">
+    <div class="head">
+      <h2 class="serif">Développement d'applications</h2>
+      <div class="strip" aria-hidden="true">
+        <span class="pt">Votre besoin</span>
+        <span class="line"></span>
+        <span class="pt">Mise en service</span>
+      </div>
+    </div>
+    <div>
+      <p class="body">Applications web sur mesure : outils métier, calculateurs, interfaces internes. Conçues pour servir tous les jours, sur le terrain, y compris hors connexion.</p>
+      <p class="body">Je livre un outil qui fonctionne, pas une maquette.</p>
+      <a class="proof" href="https://prevol.pages.dev" target="_blank" rel="noopener">
+        <span class="lbl">En service</span>
+        <span class="val">PréVol — préparation de vol et masse &amp; centrage</span>
+      </a>
+    </div>
+  </article>
+
+</main>
+
+<section class="contact" id="contact">
+  <div class="inner">
+    <span class="tag">Écrire</span>
+    <h2 class="serif">Un véhicule à convoyer,<br>un outil à concevoir ?</h2>
+    <a class="mail" href="mailto:aironeaero@outlook.fr">aironeaero@outlook.fr</a>
+  </div>
+</section>
+
+<footer>
+  <img src="mark.png" alt="Air One Aero">
+  <span class="tag">Air One Aero &nbsp;·&nbsp; Micro-entreprise &nbsp;·&nbsp; France</span>
+</footer>
+
+</body>
+</html>

@@ -175,34 +175,6 @@ button.accent{
 }
 button:hover{filter:brightness(.97)}
 .hidden{display:none!important}
-.summary{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
-.sum-section{page-break-inside:avoid;break-inside:avoid}
-.sum-section-title{
-  font-size:.72rem;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  font-weight:700;
-  color:var(--accent-dark);
-  margin:0 0 8px;
-  padding-bottom:4px;
-  border-bottom:1px solid var(--line);
-}
-.sum-row{
-  display:flex;
-  gap:10px;
-  padding:4px 0;
-  font-size:.92rem;
-}
-.sum-label{
-  flex:0 0 auto;
-  min-width:180px;
-  color:var(--muted);
-}
-.sum-value{flex:1;font-weight:600}
 .footer-note{
   text-align:center;
   color:var(--muted);
@@ -227,27 +199,6 @@ button:hover{filter:brightness(.97)}
   margin:0;
 }
 .choice-inline input{width:auto}
-.print-sheet{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:4px;
-  padding:clamp(20px,4vw,36px);
-  margin:20px 0;
-}
-.print-head{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding-bottom:16px;
-  margin-bottom:16px;
-  border-bottom:2px solid var(--accent);
-}
-.print-logo{width:48px;height:48px;object-fit:contain}
-.print-head-text{display:flex;flex-direction:column;gap:2px}
-.print-head-text strong{font-family:Georgia,serif;font-size:1.1rem}
-.print-head-text span{font-size:.85rem;color:var(--muted)}
-.print-title{font-weight:700;margin:0 0 2px}
-.print-date{font-size:.85rem;color:var(--muted);margin:0 0 18px}
 
 .accent-link{
   display:inline-block;
@@ -260,23 +211,146 @@ button:hover{filter:brightness(.97)}
 }
 .accent-link:hover{background:var(--accent-dark)}
 
+/* ===== Feuille recapitulative — reprend les couleurs et la structure du PDF ReportLab ===== */
+.print-sheet{
+  --navy:#0B2C3D;
+  --ink2:#28332F;
+  --muted2:#6E756F;
+  --gold:#B0803A;
+  --cream2:#F2EEE6;
+  --line2:#D7D2C8;
+  --pale-gold:#F4EADD;
+  background:var(--cream2);
+  border:1px solid var(--line2);
+  border-radius:4px;
+  padding:22px;
+  margin:20px 0;
+  color:var(--ink2);
+}
+.ps-head{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding-bottom:14px;
+  margin-bottom:14px;
+  border-bottom:1px solid var(--line2);
+}
+.ps-logo{width:52px;height:52px;object-fit:contain;flex:0 0 auto}
+.ps-eyebrow{
+  display:block;
+  font-size:.68rem;
+  letter-spacing:.22em;
+  font-weight:700;
+  color:var(--muted2);
+  margin-bottom:2px;
+}
+.ps-title{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:1.8rem;
+  line-height:1.05;
+  margin:0 0 4px;
+  color:var(--navy);
+}
+.ps-subtitle{margin:0;font-size:.85rem;color:var(--muted2)}
+
+.ps-idbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1px;
+  background:var(--navy);
+  color:#fff;
+  border-radius:3px;
+  overflow:hidden;
+  margin-bottom:18px;
+}
+.ps-idbar > div{flex:1 1 0;min-width:110px;padding:9px 12px;background:var(--navy)}
+.ps-idbar span{
+  display:block;
+  font-size:.62rem;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.65);
+  margin-bottom:2px;
+}
+.ps-idbar strong{font-weight:600;font-size:.85rem}
+
+.ps-h3{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:1.05rem;
+  color:var(--navy);
+  margin:18px 0 8px;
+}
+.ps-grid2{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1px;
+  background:var(--line2);
+  border:1px solid var(--line2);
+  border-radius:3px;
+  overflow:hidden;
+}
+.ps-grid2 > .ps-cell{flex:1 1 45%;min-width:200px}
+.ps-cell{background:#fff;padding:10px 12px}
+.ps-cell span{
+  display:block;
+  font-size:.68rem;
+  color:var(--muted2);
+  margin-bottom:2px;
+}
+.ps-cell strong{font-weight:600;font-size:.86rem;color:var(--ink2)}
+
+.ps-pair{
+  background:transparent;
+  border:0;
+  gap:14px;
+}
+.ps-pair > .ps-block{flex:1 1 45%;min-width:220px}
+.ps-block{background:#fff;border:1px solid var(--line2);border-radius:3px;padding:12px}
+.ps-block .ps-h3{margin:0 0 8px;font-size:.92rem}
+.ps-block .ps-cell{padding:8px 0;background:transparent}
+
+.ps-accentbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1px;
+  background:var(--gold);
+  border:1px solid var(--gold);
+  border-radius:3px;
+  overflow:hidden;
+  margin:18px 0;
+}
+.ps-accentbar > div{flex:1 1 0;min-width:130px;background:var(--pale-gold);padding:9px 12px}
+.ps-accentbar span{display:block;font-size:.62rem;letter-spacing:.1em;color:var(--muted2);margin-bottom:2px}
+.ps-accentbar strong{font-weight:700;font-size:.86rem;color:var(--navy)}
+
+.ps-foot{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  padding-top:12px;
+  border-top:1px solid var(--line2);
+  font-size:.78rem;
+  color:var(--muted2);
+}
+
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:13mm 13mm 10mm 13mm}
   header, .progress-wrap, .actions, .footer-note,
   #copyStatus, #sendStatus, .card > .eyebrow, .card > h2, .card > .success{
     display:none !important;
   }
-  body{background:#fff;font-size:9.5pt;line-height:1.42}
+  body{background:#fff;font-size:9pt;line-height:1.4}
   .shell{margin:0;width:100%}
   .card{border:0;padding:0;margin:0}
-  .print-sheet{border:0;padding:0}
-  .print-head{padding-bottom:10px;margin-bottom:12px}
-  .print-logo{width:36px;height:36px}
-  .print-title{font-size:1rem}
-  .summary{gap:10px}
-  .sum-section-title{font-size:.62rem}
-  .sum-row{padding:2px 0;font-size:.82rem}
-  .sum-label{min-width:150px}
+  .print-sheet{border:0;background:#fff;padding:0}
+  .ps-idbar, .ps-accentbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ps-title{font-size:1.5rem}
+  .ps-h3{font-size:.9rem;margin:12px 0 6px}
+  .ps-cell{padding:6px 10px}
+  .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
 </style>
 </head>
@@ -577,16 +651,84 @@ button:hover{filter:brightness(.97)}
     <p class="success">✓ Questionnaire terminé</p>
 
     <div id="printSheet" class="print-sheet">
-      <div class="print-head">
-        <img src="mark.png" alt="Air One Aero" class="print-logo">
-        <div class="print-head-text">
-          <strong>Air One Aero</strong>
-          <span>Erwan Cellerier &nbsp;·&nbsp; aironeaero@outlook.fr</span>
+      <div class="ps-head">
+        <img src="mark.png" alt="Air One Aero" class="ps-logo">
+        <div class="ps-head-text">
+          <span class="ps-eyebrow">AIR ONE AERO</span>
+          <h1 class="ps-title">Récapitulatif de projet</h1>
+          <p class="ps-subtitle">Questionnaire de préparation — création d'un site internet professionnel</p>
         </div>
       </div>
-      <p class="print-title">Récapitulatif de projet — <span id="printCompany"></span></p>
-      <p class="print-date" id="printDate"></p>
-      <div id="summary" class="summary"></div>
+
+      <div class="ps-idbar">
+        <div><span>ENTREPRISE</span><strong id="pCompany"></strong></div>
+        <div><span>CONTACT</span><strong id="pContact"></strong></div>
+        <div><span>E-MAIL</span><strong id="pEmail"></strong></div>
+        <div><span>TÉLÉPHONE</span><strong id="pPhone"></strong></div>
+        <div><span>DATE</span><strong id="pDate"></strong></div>
+      </div>
+
+      <h3 class="ps-h3">01 · Votre activité</h3>
+      <div class="ps-grid2">
+        <div class="ps-cell"><span>Activité</span><strong id="pActivity"></strong></div>
+        <div class="ps-cell"><span>Ville / zone</span><strong id="pCity"></strong></div>
+        <div class="ps-cell"><span>Site existant</span><strong id="pExistingSite"></strong></div>
+        <div class="ps-cell"><span>Site actuel</span><strong id="pExistingUrl"></strong></div>
+      </div>
+
+      <h3 class="ps-h3">02 · Objectifs</h3>
+      <div class="ps-grid2">
+        <div class="ps-cell"><span>Objectifs</span><strong id="pGoals"></strong></div>
+        <div class="ps-cell"><span>Objectif principal</span><strong id="pMainGoal"></strong></div>
+      </div>
+
+      <h3 class="ps-h3">03 · Contenu &amp; identité</h3>
+      <div class="ps-grid2">
+        <div class="ps-cell"><span>Éléments disponibles</span><strong id="pAssets"></strong></div>
+        <div class="ps-cell"><span>Style souhaité</span><strong id="pTone"></strong></div>
+        <div class="ps-cell"><span>Inspiration</span><strong id="pInspiration"></strong></div>
+        <div class="ps-cell"><span>Couleurs / idées</span><strong id="pBrandNotes"></strong></div>
+      </div>
+
+      <div class="ps-grid2 ps-pair">
+        <div class="ps-block">
+          <h3 class="ps-h3">04 · Pages</h3>
+          <div class="ps-cell"><span>Demandées</span><strong id="pPages"></strong></div>
+          <div class="ps-cell"><span>Autres pages / besoins</span><strong id="pOtherPages"></strong></div>
+        </div>
+        <div class="ps-block">
+          <h3 class="ps-h3">05 · Fonctionnalités</h3>
+          <div class="ps-cell"><span>Souhaitées</span><strong id="pFeatures"></strong></div>
+          <div class="ps-cell"><span>Détails</span><strong id="pFeatureDetails"></strong></div>
+        </div>
+      </div>
+
+      <h3 class="ps-h3">06 · Visibilité</h3>
+      <div class="ps-grid2">
+        <div class="ps-cell"><span>Mots-clés</span><strong id="pKeywords"></strong></div>
+        <div class="ps-cell"><span>Google Business Profile</span><strong id="pGoogleProfile"></strong></div>
+        <div class="ps-cell"><span>Instagram</span><strong id="pInstagram"></strong></div>
+        <div class="ps-cell"><span>Facebook</span><strong id="pFacebook"></strong></div>
+      </div>
+
+      <div class="ps-accentbar">
+        <div><span>BUDGET</span><strong id="pBudget"></strong></div>
+        <div><span>MISE EN LIGNE</span><strong id="pDeadline"></strong></div>
+        <div><span>URGENCE</span><strong id="pPriority"></strong></div>
+        <div><span>DOMAINE</span><strong id="pDomain"></strong></div>
+      </div>
+
+      <div class="ps-grid2">
+        <div class="ps-cell"><span>Après mise en ligne</span><strong id="pAftercare"></strong></div>
+        <div class="ps-cell"><span>Nom de domaine souhaité</span><strong id="pDomainName"></strong></div>
+        <div class="ps-cell"><span>Informations particulières</span><strong id="pLegal"></strong></div>
+        <div class="ps-cell"><span>Autres remarques</span><strong id="pFinalNotes"></strong></div>
+      </div>
+
+      <div class="ps-foot">
+        <span>Air One Aero · Erwan Cellerier · aironeaero@outlook.fr</span>
+        <span>Merci pour votre confiance.</span>
+      </div>
     </div>
 
     <div class="actions">
@@ -623,14 +765,11 @@ button:hover{filter:brightness(.97)}
   const label = document.getElementById('progressLabel');
   const pct = document.getElementById('progressPct');
   const summaryCard = document.getElementById('summaryCard');
-  const summary = document.getElementById('summary');
   const editBtn = document.getElementById('editBtn');
   const copyBtn = document.getElementById('copyBtn');
   const pdfBtn = document.getElementById('pdfBtn');
   const thanksCard = document.getElementById('thanksCard');
   const restartBtn = document.getElementById('restartBtn');
-  const printCompany = document.getElementById('printCompany');
-  const printDate = document.getElementById('printDate');
   const copyStatus = document.getElementById('copyStatus');
 
   let current = 0;
@@ -794,38 +933,55 @@ button:hover{filter:brightness(.97)}
     ];
   }
 
+  function fillField(id, text){
+    const el = document.getElementById(id);
+    if (el) el.textContent = (text && String(text).trim()) ? text : '\u2014';
+  }
+
   function renderSummary(){
-    const sections = buildSummarySections();
-    summary.innerHTML = '';
+    const date = value('deadline');
+    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'À préciser';
+    const today = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
 
-    sections.forEach(function(sec){
-      const box = document.createElement('div');
-      box.className = 'sum-section';
+    fillField('pCompany', value('company'));
+    fillField('pContact', value('contact'));
+    fillField('pEmail', value('email'));
+    fillField('pPhone', value('phone'));
+    fillField('pDate', today);
 
-      const h = document.createElement('div');
-      h.className = 'sum-section-title';
-      h.textContent = sec.title;
-      box.appendChild(h);
+    fillField('pActivity', value('activity'));
+    fillField('pCity', value('city'));
+    fillField('pExistingSite', form.querySelector('[name="existingSite"]:checked')?.value);
+    fillField('pExistingUrl', value('existingUrl'));
 
-      sec.rows.forEach(function(pair){
-        const row = document.createElement('div');
-        row.className = 'sum-row';
+    fillField('pGoals', formatList(checkedValues('goals')));
+    fillField('pMainGoal', value('mainGoal'));
 
-        const label = document.createElement('span');
-        label.className = 'sum-label';
-        label.textContent = pair[0];
+    fillField('pAssets', formatList(checkedValues('assets')));
+    fillField('pTone', value('tone'));
+    fillField('pInspiration', value('inspiration'));
+    fillField('pBrandNotes', value('brandNotes'));
 
-        const val = document.createElement('span');
-        val.className = 'sum-value';
-        val.textContent = pair[1];
+    fillField('pPages', formatList(checkedValues('pages')));
+    fillField('pOtherPages', value('otherPages'));
 
-        row.appendChild(label);
-        row.appendChild(val);
-        box.appendChild(row);
-      });
+    fillField('pFeatures', formatList(checkedValues('features')));
+    fillField('pFeatureDetails', value('featureDetails'));
 
-      summary.appendChild(box);
-    });
+    fillField('pKeywords', value('keywords'));
+    fillField('pGoogleProfile', value('googleProfile'));
+    fillField('pInstagram', value('socialInstagram'));
+    fillField('pFacebook', value('socialFacebook'));
+
+    fillField('pBudget', form.querySelector('[name="budget"]:checked')?.value);
+    fillField('pDeadline', deadline);
+    fillField('pPriority', value('priority'));
+    fillField('pDomain', value('domain'));
+
+    fillField('pAftercare', formatList(checkedValues('aftercare')));
+    fillField('pDomainName', value('domainName'));
+    fillField('pLegal', value('legal'));
+    fillField('pFinalNotes', value('finalNotes'));
   }
 
   nextBtn.addEventListener('click', function(){
@@ -841,10 +997,6 @@ button:hover{filter:brightness(.97)}
         return;
       }
       renderSummary();
-      printCompany.textContent = value('company') || 'Sans nom';
-      printDate.textContent = new Intl.DateTimeFormat('fr-FR', {
-        day: 'numeric', month: 'long', year: 'numeric'
-      }).format(new Date());
       form.classList.add('hidden');
       summaryCard.classList.remove('hidden');
       window.scrollTo({top:0, behavior:'smooth'});

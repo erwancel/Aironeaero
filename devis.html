@@ -353,6 +353,7 @@ button:hover{filter:brightness(.97)}
   .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -765,6 +766,7 @@ button:hover{filter:brightness(.97)}
   const label = document.getElementById('progressLabel');
   const pct = document.getElementById('progressPct');
   const summaryCard = document.getElementById('summaryCard');
+  const printSheet = document.getElementById('printSheet');
   const editBtn = document.getElementById('editBtn');
   const copyBtn = document.getElementById('copyBtn');
   const pdfBtn = document.getElementById('pdfBtn');
@@ -1023,7 +1025,42 @@ button:hover{filter:brightness(.97)}
   });
 
   pdfBtn.addEventListener('click', function(){
-    window.print();
+    if (typeof html2pdf === 'undefined') {
+      // Bibliotheque non chargee (connexion coupee, bloqueur de script...) : on retombe
+      // sur l'impression navigateur, qui permet quand meme d'enregistrer en PDF.
+      window.print();
+      return;
+    }
+
+    pdfBtn.disabled = true;
+    const original = pdfBtn.textContent;
+    pdfBtn.textContent = 'Génération…';
+
+    const nomFichier =
+      'recapitulatif-' +
+      (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
+      '.pdf';
+
+    html2pdf()
+      .set({
+        margin: [10, 10, 10, 10],
+        filename: nomFichier,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'avoid-all'] }
+      })
+      .from(printSheet)
+      .save()
+      .then(function(){
+        pdfBtn.disabled = false;
+        pdfBtn.textContent = original;
+      })
+      .catch(function(){
+        pdfBtn.disabled = false;
+        pdfBtn.textContent = original;
+        window.print();
+      });
   });
 
   restartBtn.addEventListener('click', function(){

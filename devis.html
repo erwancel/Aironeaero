@@ -176,16 +176,33 @@ button.accent{
 button:hover{filter:brightness(.97)}
 .hidden{display:none!important}
 .summary{
-  white-space:pre-wrap;
-  background:#fffdfa;
-  border:1px dashed rgba(43,51,48,.24);
-  padding:18px;
-  border-radius:3px;
-  max-height:520px;
-  overflow:auto;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:.86rem;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
+.sum-section{page-break-inside:avoid;break-inside:avoid}
+.sum-section-title{
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--accent-dark);
+  margin:0 0 8px;
+  padding-bottom:4px;
+  border-bottom:1px solid var(--line);
+}
+.sum-row{
+  display:flex;
+  gap:10px;
+  padding:4px 0;
+  font-size:.92rem;
+}
+.sum-label{
+  flex:0 0 auto;
+  min-width:180px;
+  color:var(--muted);
+}
+.sum-value{flex:1;font-weight:600}
 .footer-note{
   text-align:center;
   color:var(--muted);
@@ -244,14 +261,22 @@ button:hover{filter:brightness(.97)}
 .accent-link:hover{background:var(--accent-dark)}
 
 @media print{
+  @page{size:A4;margin:14mm}
   header, .progress-wrap, .actions, .footer-note,
   #copyStatus, #sendStatus, .card > .eyebrow, .card > h2, .card > .success{
     display:none !important;
   }
-  body{background:#fff}
+  body{background:#fff;font-size:9.5pt;line-height:1.42}
   .shell{margin:0;width:100%}
   .card{border:0;padding:0;margin:0}
   .print-sheet{border:0;padding:0}
+  .print-head{padding-bottom:10px;margin-bottom:12px}
+  .print-logo{width:36px;height:36px}
+  .print-title{font-size:1rem}
+  .summary{gap:10px}
+  .sum-section-title{font-size:.62rem}
+  .sum-row{padding:2px 0;font-size:.82rem}
+  .sum-label{min-width:150px}
 }
 </style>
 </head>
@@ -715,6 +740,94 @@ button:hover{filter:brightness(.97)}
     ].join('\n');
   }
 
+  function buildSummarySections(){
+    const date = value('deadline');
+    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'Non précisée';
+
+    return [
+      { title: '1. Entreprise', rows: [
+        ['Entreprise', value('company')],
+        ['Contact', value('contact')],
+        ['E-mail', value('email')],
+        ['Téléphone', value('phone') || 'Non renseigné'],
+        ['Activité', value('activity')],
+        ['Ville / zone', value('city') || 'Non renseignée'],
+        ['Site existant', form.querySelector('[name="existingSite"]:checked')?.value || 'Non précisé'],
+        ['Site actuel', value('existingUrl') || 'Non renseigné'],
+      ]},
+      { title: '2. Objectifs', rows: [
+        ['Objectifs', formatList(checkedValues('goals'))],
+        ['Objectif principal', value('mainGoal')],
+      ]},
+      { title: '3. Contenu & identité', rows: [
+        ['Éléments disponibles', formatList(checkedValues('assets'))],
+        ['Style souhaité', value('tone') || 'Non précisé'],
+        ['Sites d’inspiration', value('inspiration') || 'Non renseigné'],
+        ['Couleurs / contraintes / idées', value('brandNotes') || 'Non renseignées'],
+      ]},
+      { title: '4. Pages', rows: [
+        ['Pages souhaitées', formatList(checkedValues('pages'))],
+        ['Autres pages / besoins', value('otherPages') || 'Aucun'],
+      ]},
+      { title: '5. Fonctionnalités', rows: [
+        ['Fonctionnalités', formatList(checkedValues('features'))],
+        ['Détails', value('featureDetails') || 'Aucun'],
+      ]},
+      { title: '6. Visibilité', rows: [
+        ['Mots-clés', value('keywords') || 'Non renseignés'],
+        ['Google Business Profile', value('googleProfile') || 'Non précisé'],
+        ['Instagram', value('socialInstagram') || 'Non renseigné'],
+        ['Facebook', value('socialFacebook') || 'Non renseigné'],
+      ]},
+      { title: '7. Budget & calendrier', rows: [
+        ['Budget', form.querySelector('[name="budget"]:checked')?.value || 'Non précisé'],
+        ['Mise en ligne souhaitée', deadline],
+        ['Urgence', value('priority') || 'Non précisée'],
+        ['Après mise en ligne', formatList(checkedValues('aftercare'))],
+      ]},
+      { title: '8. Domaine & autres', rows: [
+        ['Nom de domaine existant', value('domain') || 'Non précisé'],
+        ['Nom de domaine souhaité', value('domainName') || 'Non renseigné'],
+        ['Informations particulières', value('legal') || 'Aucune'],
+        ['Autres remarques', value('finalNotes') || 'Aucune'],
+      ]},
+    ];
+  }
+
+  function renderSummary(){
+    const sections = buildSummarySections();
+    summary.innerHTML = '';
+
+    sections.forEach(function(sec){
+      const box = document.createElement('div');
+      box.className = 'sum-section';
+
+      const h = document.createElement('div');
+      h.className = 'sum-section-title';
+      h.textContent = sec.title;
+      box.appendChild(h);
+
+      sec.rows.forEach(function(pair){
+        const row = document.createElement('div');
+        row.className = 'sum-row';
+
+        const label = document.createElement('span');
+        label.className = 'sum-label';
+        label.textContent = pair[0];
+
+        const val = document.createElement('span');
+        val.className = 'sum-value';
+        val.textContent = pair[1];
+
+        row.appendChild(label);
+        row.appendChild(val);
+        box.appendChild(row);
+      });
+
+      summary.appendChild(box);
+    });
+  }
+
   nextBtn.addEventListener('click', function(){
     if(!validateStep()) return;
 
@@ -727,7 +840,7 @@ button:hover{filter:brightness(.97)}
         consent.reportValidity();
         return;
       }
-      summary.textContent = buildSummary();
+      renderSummary();
       printCompany.textContent = value('company') || 'Sans nom';
       printDate.textContent = new Intl.DateTimeFormat('fr-FR', {
         day: 'numeric', month: 'long', year: 'numeric'
@@ -750,7 +863,7 @@ button:hover{filter:brightness(.97)}
 
   copyBtn.addEventListener('click', async function(){
     try{
-      await navigator.clipboard.writeText(summary.textContent);
+      await navigator.clipboard.writeText(buildSummary());
       copyStatus.textContent = 'Récapitulatif copié dans le presse-papiers.';
     }catch(e){
       copyStatus.textContent = 'La copie automatique est bloquée par le navigateur. Sélectionnez le texte et copiez-le manuellement.';
@@ -788,7 +901,7 @@ button:hover{filter:brightness(.97)}
       contact: value('contact'),
       email: value('email'),
       telephone: value('phone') || 'Non renseigné',
-      recapitulatif: summary.textContent
+      recapitulatif: buildSummary()
     };
 
     try {
@@ -804,11 +917,22 @@ button:hover{filter:brightness(.97)}
         thanksCard.classList.remove('hidden');
         window.scrollTo({top:0, behavior:'smooth'});
       } else {
-        sendStatus.textContent = "L'envoi a échoué. Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
+        // On affiche le detail exact renvoye par Formspree pour pouvoir diagnostiquer.
+        let detail = 'HTTP ' + res.status;
+        try {
+          const data = await res.json();
+          if (data && data.errors && data.errors.length) {
+            detail += ' — ' + data.errors.map(e => e.message || JSON.stringify(e)).join(' ; ');
+          }
+        } catch (parseErr) { /* reponse non-JSON, on garde juste le code HTTP */ }
+
+        sendStatus.textContent =
+          "L'envoi a échoué (" + detail + "). Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail. " +
+          "Si le problème persiste, vérifiez que vous avez confirmé votre formulaire depuis l'e-mail envoyé par Formspree à sa création.";
         sendBtn.disabled = false;
       }
     } catch (e) {
-      sendStatus.textContent = "Connexion impossible. Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
+      sendStatus.textContent = "Connexion impossible (" + e.message + "). Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
       sendBtn.disabled = false;
     }
   });

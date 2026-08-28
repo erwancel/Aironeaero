@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questionnaire projet site internet</title>
+<meta name="description" content="Questionnaire interactif pour préparer la création d'un site internet professionnel.">
+<style>
+:root{
+  --bg:#efebe3;
+  --paper:#f7f4ee;
+  --ink:#2b3330;
+  --muted:#74766f;
+  --line:rgba(43,51,48,.16);
+  --accent:#b0803a;
+  --accent-dark:#8b642c;
+  --ok:#496a56;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  line-height:1.6;
+}
+.shell{
+  width:min(980px,calc(100% - 32px));
+  margin:48px auto;
+}
+header{
+  padding:32px 0 28px;
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{
+  font-size:.72rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--muted);
+}
+h1,h2{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:400;
+  line-height:1.05;
+  margin:.7rem 0 1rem;
+}
+h1{font-size:clamp(2.6rem,7vw,5.7rem)}
+h2{font-size:clamp(1.8rem,4vw,3rem)}
+.lead{
+  max-width:720px;
+  color:#4f5854;
+  font-size:1.05rem;
+}
+.progress-wrap{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(239,235,227,.96);
+  backdrop-filter:blur(8px);
+  padding:14px 0 10px;
+}
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:.8rem;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.progress{
+  height:5px;
+  background:rgba(43,51,48,.1);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress > span{
+  display:block;
+  height:100%;
+  width:12.5%;
+  background:var(--accent);
+  transition:width .25s ease;
+}
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:clamp(22px,4vw,38px);
+  margin:26px 0;
+}
+.step{display:none}
+.step.active{display:block}
+.grid{
+  display:grid;
+  gap:18px;
+}
+@media(min-width:720px){
+  .grid.two{grid-template-columns:1fr 1fr}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+}
+.field{margin-bottom:17px}
+label{
+  display:block;
+  font-weight:700;
+  margin-bottom:7px;
+}
+.label-help{
+  color:var(--muted);
+  font-weight:400;
+  font-size:.87rem;
+}
+input,select,textarea{
+  width:100%;
+  border:1px solid rgba(43,51,48,.22);
+  background:#fffdfa;
+  color:var(--ink);
+  font:inherit;
+  border-radius:3px;
+  padding:12px 13px;
+}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{
+  outline:2px solid rgba(176,128,58,.22);
+  border-color:var(--accent);
+}
+.options{
+  display:grid;
+  gap:10px;
+  margin-top:8px;
+}
+.option{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  background:#fffdfa;
+  padding:12px 13px;
+  border-radius:3px;
+  cursor:pointer;
+}
+.option input{width:auto;margin-top:4px}
+.option span{font-weight:400}
+.notice{
+  background:rgba(176,128,58,.09);
+  border-left:3px solid var(--accent);
+  padding:14px 16px;
+  margin:18px 0;
+}
+.actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:26px;
+  flex-wrap:wrap;
+}
+button{
+  border:1px solid var(--ink);
+  background:var(--ink);
+  color:var(--paper);
+  padding:12px 18px;
+  border-radius:3px;
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+}
+button.secondary{
+  background:transparent;
+  color:var(--ink);
+}
+button.accent{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#231a0c;
+}
+button:hover{filter:brightness(.97)}
+.hidden{display:none!important}
+.summary{
+  white-space:pre-wrap;
+  background:#fffdfa;
+  border:1px dashed rgba(43,51,48,.24);
+  padding:18px;
+  border-radius:3px;
+  max-height:520px;
+  overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.86rem;
+}
+.footer-note{
+  text-align:center;
+  color:var(--muted);
+  font-size:.78rem;
+  padding:0 0 36px;
+}
+.required{color:#a84d3a}
+.success{
+  color:var(--ok);
+  font-weight:700;
+}
+.choice-inline{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.choice-inline label{
+  font-weight:400;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin:0;
+}
+.choice-inline input{width:auto}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="eyebrow">Projet de création de site</div>
+    <h1>Votre projet,<br>en quelques minutes.</h1>
+    <p class="lead">
+      Ce questionnaire me permet de comprendre votre activité, vos objectifs et vos attentes
+      avant de vous proposer une structure, un design et un devis adaptés.
+    </p>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span id="progressLabel">Étape 1 sur 8</span>
+      <span id="progressPct">12 %</span>
+    </div>
+    <div class="progress"><span id="progressBar"></span></div>
+  </div>
+
+  <form id="projectForm" novalidate>
+    <section class="card step active" data-step="1">
+      <div class="eyebrow">01 · Votre activité</div>
+      <h2>Parlez-moi de votre entreprise.</h2>
+
+      <div class="grid two">
+        <div class="field">
+          <label for="company">Nom de l'entreprise <span class="required">*</span></label>
+          <input id="company" name="company" required>
+        </div>
+        <div class="field">
+          <label for="contact">Votre nom <span class="required">*</span></label>
+          <input id="contact" name="contact" required>
+        </div>
+        <div class="field">
+          <label for="email">E-mail <span class="required">*</span></label>
+          <input id="email" name="email" type="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">Téléphone</label>
+          <input id="phone" name="phone" type="tel">
+        </div>
+        <div class="field">
+          <label for="activity">Votre activité <span class="required">*</span></label>
+          <input id="activity" name="activity" placeholder="Restaurant, coiffeur, artisan..." required>
+        </div>
+        <div class="field">
+          <label for="city">Ville / zone desservie</label>
+          <input id="city" name="city">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Votre entreprise a-t-elle déjà un site internet ? <span class="required">*</span></label>
+        <div class="choice-inline">
+          <label><input type="radio" name="existingSite" value="Non" required> Non</label>
+          <label><input type="radio" name="existingSite" value="Oui"> Oui</label>
+        </div>
+      </div>
+      <div class="field">
+        <label for="existingUrl">Si oui, adresse du site</label>
+        <input id="existingUrl" name="existingUrl" placeholder="https://...">
+      </div>
+    </section>
+
+    <section class="card step" data-step="2">
+      <div class="eyebrow">02 · Objectifs</div>
+      <h2>Que doit vous apporter le site ?</h2>
+      <p class="label-help">Cochez tout ce qui correspond à votre besoin.</p>
+
+      <div class="options">
+        <label class="option"><input type="checkbox" name="goals" value="Présenter l'entreprise"><span>Présenter clairement mon entreprise et mes services</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Être visible sur Google"><span>Être mieux trouvé sur Google</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Recevoir des contacts"><span>Recevoir des demandes de contact</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Prendre des réservations"><span>Permettre la prise de rendez-vous / réservations</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Vendre en ligne"><span>Vendre des produits ou services en ligne</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Rassurer"><span>Rassurer les clients avec une présence professionnelle</span></label>
+      </div>
+
+      <div class="field" style="margin-top:20px">
+        <label for="mainGoal">Votre objectif n°1 <span class="required">*</span></label>
+        <textarea id="mainGoal" name="mainGoal" placeholder="Ex. : recevoir plus de demandes de devis..." required></textarea>
+      </div>
+    </section>
+
+    <section class="card step" data-step="3">
+      <div class="eyebrow">03 · Contenu</div>
+      <h2>Qu'avez-vous déjà ?</h2>
+
+      <div class="options">
+        <label class="option"><input type="checkbox" name="assets" value="Logo"><span>Logo</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Photos"><span>Photos professionnelles</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Textes"><span>Textes de présentation</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Tarifs / catalogue"><span>Tarifs, catalogue ou carte</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Réseaux sociaux"><span>Réseaux sociaux actifs</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Google Business Profile"><span>Fiche Google Business Profile</span></label>
+      </div>
+
+      <div class="grid two" style="margin-top:20px">
+        <div class="field">
+          <label for="tone">Style souhaité</label>
+          <select id="tone" name="tone">
+            <option value="">Choisir</option>
+            <option>Élégant / haut de gamme</option>
+            <option>Moderne / minimaliste</option>
+            <option>Chaleureux / convivial</option>
+            <option>Artisanal / authentique</option>
+            <option>Coloré / dynamique</option>
+            <option>Je ne sais pas encore</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="inspiration">Sites que vous aimez</label>
+          <input id="inspiration" name="inspiration" placeholder="Liens ou noms de sites">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="brandNotes">Vos couleurs, contraintes ou idées</label>
+        <textarea id="brandNotes" name="brandNotes" placeholder="Couleurs à conserver, éléments à éviter, ambiance souhaitée..."></textarea>
+      </div>
+    </section>
+
+    <section class="card step" data-step="4">
+      <div class="eyebrow">04 · Pages</div>
+      <h2>Que voulez-vous sur le site ?</h2>
+      <p class="label-help">Je pourrai ensuite vous proposer une arborescence cohérente.</p>
+
+      <div class="options">
+        <label class="option"><input type="checkbox" name="pages" value="Accueil" checked><span>Accueil</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="À propos"><span>À propos / Notre histoire</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Services"><span>Services / Prestations</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Tarifs / Menu"><span>Tarifs / Menu</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Galerie"><span>Galerie photos</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Avis"><span>Avis clients</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Réservation"><span>Réservation / prise de rendez-vous</span></label>
+        <label class="option"><input type="checkbox" name="pages" value="Contact"><span>Contact / Nous trouver</span></label>
+      </div>
+
+      <div class="field" style="margin-top:20px">
+        <label for="otherPages">Autres pages ou besoins</label>
+        <textarea id="otherPages" name="otherPages"></textarea>
+      </div>
+    </section>
+
+    <section class="card step" data-step="5">
+      <div class="eyebrow">05 · Fonctionnalités</div>
+      <h2>Quelles fonctionnalités souhaitez-vous ?</h2>
+
+      <div class="options">
+        <label class="option"><input type="checkbox" name="features" value="Formulaire de contact"><span>Formulaire de contact</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Google Maps"><span>Google Maps / itinéraire</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Réservation en ligne"><span>Réservation en ligne</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Paiement en ligne"><span>Paiement en ligne</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Boutique"><span>Boutique / e-commerce</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Multilingue"><span>Site multilingue</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Newsletter"><span>Newsletter</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Réseaux sociaux"><span>Intégration réseaux sociaux</span></label>
+      </div>
+
+      <div class="field" style="margin-top:20px">
+        <label for="featureDetails">Détaillez vos besoins particuliers</label>
+        <textarea id="featureDetails" name="featureDetails" placeholder="Ex. : réservation pour 8 personnes maximum, paiement Stripe, etc."></textarea>
+      </div>
+    </section>
+
+    <section class="card step" data-step="6">
+      <div class="eyebrow">06 · Visibilité</div>
+      <h2>Comment souhaitez-vous être trouvé ?</h2>
+
+      <div class="grid two">
+        <div class="field">
+          <label for="keywords">Mots-clés importants</label>
+          <textarea id="keywords" name="keywords" placeholder="Ex. : coiffeur Nantes, restaurant Vannes..."></textarea>
+        </div>
+        <div class="field">
+          <label for="googleProfile">Avez-vous une fiche Google Business Profile ?</label>
+          <select id="googleProfile" name="googleProfile">
+            <option value="">Choisir</option>
+            <option>Oui, elle existe</option>
+            <option>Non</option>
+            <option>Je ne sais pas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="field">
+          <label for="socialInstagram">Instagram</label>
+          <input id="socialInstagram" name="socialInstagram">
+        </div>
+        <div class="field">
+          <label for="socialFacebook">Facebook</label>
+          <input id="socialFacebook" name="socialFacebook">
+        </div>
+      </div>
+
+      <div class="notice">
+        Plus j'en sais sur votre zone géographique et votre clientèle, plus je peux adapter le site au référencement local.
+      </div>
+    </section>
+
+    <section class="card step" data-step="7">
+      <div class="eyebrow">07 · Budget & calendrier</div>
+      <h2>Cadre du projet.</h2>
+
+      <div class="field">
+        <label>Budget envisagé</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="budget" value="< 1 000 €"><span>Moins de 1 000 €</span></label>
+          <label class="option"><input type="radio" name="budget" value="1 000 – 2 000 €"><span>1 000 – 2 000 €</span></label>
+          <label class="option"><input type="radio" name="budget" value="2 000 – 4 000 €"><span>2 000 – 4 000 €</span></label>
+          <label class="option"><input type="radio" name="budget" value="> 4 000 €"><span>Plus de 4 000 €</span></label>
+          <label class="option"><input type="radio" name="budget" value="Je ne sais pas"><span>Je ne sais pas encore</span></label>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="field">
+          <label for="deadline">Date souhaitée de mise en ligne</label>
+          <input id="deadline" name="deadline" type="date">
+        </div>
+        <div class="field">
+          <label for="priority">Urgence du projet</label>
+          <select id="priority" name="priority">
+            <option value="">Choisir</option>
+            <option>Pas d'urgence</option>
+            <option>Dans les 1 à 2 mois</option>
+            <option>Dans les 2 à 4 semaines</option>
+            <option>Le plus rapidement possible</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Souhaitez-vous un accompagnement après la mise en ligne ?</label>
+        <div class="options">
+          <label class="option"><input type="checkbox" name="aftercare" value="Maintenance"><span>Maintenance technique</span></label>
+          <label class="option"><input type="checkbox" name="aftercare" value="Modifications"><span>Modifications de contenu</span></label>
+          <label class="option"><input type="checkbox" name="aftercare" value="SEO"><span>Accompagnement SEO</span></label>
+          <label class="option"><input type="checkbox" name="aftercare" value="Aucun"><span>Non, je souhaite gérer la suite moi-même</span></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="card step" data-step="8">
+      <div class="eyebrow">08 · Domaine & informations pratiques</div>
+      <h2>Derniers détails.</h2>
+
+      <div class="grid two">
+        <div class="field">
+          <label for="domain">Avez-vous déjà un nom de domaine ?</label>
+          <select id="domain" name="domain">
+            <option value="">Choisir</option>
+            <option>Oui</option>
+            <option>Non</option>
+            <option>Je ne sais pas</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="domainName">Nom de domaine souhaité</label>
+          <input id="domainName" name="domainName" placeholder="exemple.fr">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="legal">Informations particulières à prendre en compte</label>
+        <textarea id="legal" name="legal" placeholder="Contraintes réglementaires, confidentialité, mentions légales déjà existantes, etc."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="finalNotes">Autre chose que vous souhaitez me dire ?</label>
+        <textarea id="finalNotes" name="finalNotes" placeholder="Tout ce qui peut m'aider à comprendre votre projet."></textarea>
+      </div>
+
+      <div class="notice">
+        <strong>Merci.</strong><br>
+        Une fois le questionnaire validé, le bouton ci-dessous génère un récapitulatif complet que vous pourrez me transmettre.
+      </div>
+
+      <label class="option">
+        <input type="checkbox" id="consent" required>
+        <span>J'accepte que les informations de ce questionnaire soient utilisées uniquement pour préparer mon projet de site internet. <span class="required">*</span></span>
+      </label>
+    </section>
+
+    <div class="actions">
+      <button type="button" id="prevBtn" class="secondary">← Précédent</button>
+      <button type="button" id="nextBtn" class="accent">Suivant →</button>
+    </div>
+  </form>
+
+  <section id="summaryCard" class="card hidden">
+    <div class="eyebrow">Récapitulatif</div>
+    <h2>Votre projet est prêt à être transmis.</h2>
+    <p class="success">✓ Questionnaire terminé</p>
+    <div id="summary" class="summary"></div>
+    <div class="actions">
+      <button type="button" class="accent" id="sendBtn">Envoyer ma demande</button>
+      <button type="button" class="secondary" id="editBtn">Modifier mes réponses</button>
+      <button type="button" id="copyBtn">Copier le récapitulatif</button>
+      <button type="button" id="downloadBtn">Télécharger (.txt)</button>
+    </div>
+    <p id="sendStatus" class="label-help" role="status"></p>
+    <p id="copyStatus" class="label-help"></p>
+  </section>
+
+  <p class="footer-note">Questionnaire interactif — création de site internet</p>
+</div>
+
+<script>
+(function(){
+  const form = document.getElementById('projectForm');
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const bar = document.getElementById('progressBar');
+  const label = document.getElementById('progressLabel');
+  const pct = document.getElementById('progressPct');
+  const summaryCard = document.getElementById('summaryCard');
+  const summary = document.getElementById('summary');
+  const editBtn = document.getElementById('editBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const copyStatus = document.getElementById('copyStatus');
+
+  let current = 0;
+
+  function showStep(index){
+    current = Math.max(0, Math.min(index, steps.length - 1));
+    steps.forEach((step, i) => step.classList.toggle('active', i === current));
+    prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+    nextBtn.textContent = current === steps.length - 1 ? 'Terminer →' : 'Suivant →';
+
+    const percent = Math.round(((current + 1) / steps.length) * 100);
+    bar.style.width = percent + '%';
+    label.textContent = 'Étape ' + (current + 1) + ' sur ' + steps.length;
+    pct.textContent = percent + ' %';
+    window.scrollTo({top: 0, behavior:'smooth'});
+  }
+
+  function validateStep(){
+    const required = steps[current].querySelectorAll('[required]');
+    for(const field of required){
+      if(field.type === 'checkbox' || field.type === 'radio'){
+        const group = steps[current].querySelectorAll('[name="' + field.name + '"]');
+        const checked = Array.from(group).some(el => el.checked);
+        if(!checked){
+          field.scrollIntoView({behavior:'smooth', block:'center'});
+          field.focus();
+          return false;
+        }
+      }else if(!field.value.trim()){
+        field.focus();
+        field.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function checkedValues(name){
+    return Array.from(form.querySelectorAll('[name="' + name + '"]:checked')).map(x => x.value);
+  }
+
+  function value(id){
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  function formatList(arr){
+    return arr.length ? arr.join(', ') : 'Aucune sélection';
+  }
+
+  function buildSummary(){
+    const date = value('deadline');
+    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'Non précisée';
+
+    return [
+      'QUESTIONNAIRE — PROJET DE SITE INTERNET',
+      '=========================================',
+      '',
+      '1. ENTREPRISE',
+      'Entreprise : ' + value('company'),
+      'Contact : ' + value('contact'),
+      'E-mail : ' + value('email'),
+      'Téléphone : ' + (value('phone') || 'Non renseigné'),
+      'Activité : ' + value('activity'),
+      'Ville / zone : ' + (value('city') || 'Non renseignée'),
+      'Site existant : ' + (form.querySelector('[name="existingSite"]:checked')?.value || 'Non précisé'),
+      'Site actuel : ' + (value('existingUrl') || 'Non renseigné'),
+      '',
+      '2. OBJECTIFS',
+      'Objectifs : ' + formatList(checkedValues('goals')),
+      'Objectif principal : ' + value('mainGoal'),
+      '',
+      '3. CONTENU & IDENTITÉ',
+      'Éléments disponibles : ' + formatList(checkedValues('assets')),
+      'Style souhaité : ' + (value('tone') || 'Non précisé'),
+      'Sites d’inspiration : ' + (value('inspiration') || 'Non renseigné'),
+      'Couleurs / contraintes / idées : ' + (value('brandNotes') || 'Non renseignées'),
+      '',
+      '4. PAGES',
+      'Pages souhaitées : ' + formatList(checkedValues('pages')),
+      'Autres pages / besoins : ' + (value('otherPages') || 'Aucun'),
+      '',
+      '5. FONCTIONNALITÉS',
+      'Fonctionnalités : ' + formatList(checkedValues('features')),
+      'Détails : ' + (value('featureDetails') || 'Aucun'),
+      '',
+      '6. VISIBILITÉ',
+      'Mots-clés : ' + (value('keywords') || 'Non renseignés'),
+      'Google Business Profile : ' + (value('googleProfile') || 'Non précisé'),
+      'Instagram : ' + (value('socialInstagram') || 'Non renseigné'),
+      'Facebook : ' + (value('socialFacebook') || 'Non renseigné'),
+      '',
+      '7. BUDGET & CALENDRIER',
+      'Budget : ' + (form.querySelector('[name="budget"]:checked')?.value || 'Non précisé'),
+      'Mise en ligne souhaitée : ' + deadline,
+      'Urgence : ' + (value('priority') || 'Non précisée'),
+      'Après mise en ligne : ' + formatList(checkedValues('aftercare')),
+      '',
+      '8. DOMAINE & AUTRES',
+      'Nom de domaine existant : ' + (value('domain') || 'Non précisé'),
+      'Nom de domaine souhaité : ' + (value('domainName') || 'Non renseigné'),
+      'Informations particulières : ' + (value('legal') || 'Aucune'),
+      'Autres remarques : ' + (value('finalNotes') || 'Aucune'),
+      '',
+      '=========================================',
+      'Fin du questionnaire'
+    ].join('\n');
+  }
+
+  nextBtn.addEventListener('click', function(){
+    if(!validateStep()) return;
+
+    if(current < steps.length - 1){
+      showStep(current + 1);
+    }else{
+      const consent = document.getElementById('consent');
+      if(!consent.checked){
+        consent.focus();
+        consent.reportValidity();
+        return;
+      }
+      summary.textContent = buildSummary();
+      form.classList.add('hidden');
+      summaryCard.classList.remove('hidden');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+  });
+
+  prevBtn.addEventListener('click', function(){
+    if(current > 0) showStep(current - 1);
+  });
+
+  editBtn.addEventListener('click', function(){
+    summaryCard.classList.add('hidden');
+    form.classList.remove('hidden');
+    showStep(steps.length - 1);
+  });
+
+  copyBtn.addEventListener('click', async function(){
+    try{
+      await navigator.clipboard.writeText(summary.textContent);
+      copyStatus.textContent = 'Récapitulatif copié dans le presse-papiers.';
+    }catch(e){
+      copyStatus.textContent = 'La copie automatique est bloquée par le navigateur. Sélectionnez le texte et copiez-le manuellement.';
+    }
+  });
+
+  downloadBtn.addEventListener('click', function(){
+    const blob = new Blob([summary.textContent], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'questionnaire-projet-site.txt';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // --- Envoi de la demande par e-mail (via Formspree) ---
+  // Remplacer FORMSPREE_ENDPOINT par l'URL fournie par votre compte Formspree,
+  // du type https://formspree.io/f/xxxxabcd
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xaeyykeo";
+
+  const sendBtn = document.getElementById('sendBtn');
+  const sendStatus = document.getElementById('sendStatus');
+
+  sendBtn.addEventListener('click', async function(){
+    sendBtn.disabled = true;
+    sendStatus.textContent = 'Envoi en cours…';
+
+    const payload = {
+      _subject: 'Nouvelle demande de site — ' + (value('company') || 'sans nom'),
+      entreprise: value('company'),
+      contact: value('contact'),
+      email: value('email'),
+      telephone: value('phone') || 'Non renseigné',
+      recapitulatif: summary.textContent
+    };
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        sendStatus.textContent = '✓ Votre demande a bien été envoyée. Nous revenons vers vous rapidement.';
+        sendBtn.textContent = 'Demande envoyée';
+      } else {
+        sendStatus.textContent = "L'envoi a échoué. Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
+        sendBtn.disabled = false;
+      }
+    } catch (e) {
+      sendStatus.textContent = "Connexion impossible. Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
+      sendBtn.disabled = false;
+    }
+  });
+
+  showStep(0);
+})();
+</script>
+</body>
+</html>

@@ -353,7 +353,8 @@ button:hover{filter:brightness(.97)}
   .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -1025,40 +1026,56 @@ button:hover{filter:brightness(.97)}
   });
 
   pdfBtn.addEventListener('click', function(){
-    if (typeof html2pdf === 'undefined') {
-      // Bibliotheque non chargee (connexion coupee, bloqueur de script...) : on retombe
+    const original = pdfBtn.textContent;
+
+    if (typeof html2canvas === 'undefined' || !window.jspdf) {
+      // Bibliotheques non chargees (connexion coupee, bloqueur de script...) : on retombe
       // sur l'impression navigateur, qui permet quand meme d'enregistrer en PDF.
+      sendStatus.textContent = 'Génération directe indisponible, ouverture de l\'impression…';
       window.print();
       return;
     }
 
     pdfBtn.disabled = true;
-    const original = pdfBtn.textContent;
     pdfBtn.textContent = 'Génération…';
+    sendStatus.textContent = '';
 
     const nomFichier =
       'recapitulatif-' +
       (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
       '.pdf';
 
-    html2pdf()
-      .set({
-        margin: [10, 10, 10, 10],
-        filename: nomFichier,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'avoid-all'] }
-      })
-      .from(printSheet)
-      .save()
-      .then(function(){
+    html2canvas(printSheet, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
+      .then(function(canvas){
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const pageWidth = 210, pageHeight = 297, margin = 10;
+        const imgWidth = pageWidth - margin * 2;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+        let heightLeft = imgHeight;
+        let position = margin;
+
+        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
+        heightLeft -= (pageHeight - margin * 2);
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight + margin;
+          pdf.addPage();
+          pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
+          heightLeft -= (pageHeight - margin * 2);
+        }
+
+        pdf.save(nomFichier);
         pdfBtn.disabled = false;
         pdfBtn.textContent = original;
       })
-      .catch(function(){
+      .catch(function(err){
         pdfBtn.disabled = false;
         pdfBtn.textContent = original;
+        sendStatus.textContent = 'Échec de la génération PDF (' + err.message + '). Ouverture de l\'impression…';
         window.print();
       });
   });

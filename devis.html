@@ -210,6 +210,49 @@ button:hover{filter:brightness(.97)}
   margin:0;
 }
 .choice-inline input{width:auto}
+.print-sheet{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:clamp(20px,4vw,36px);
+  margin:20px 0;
+}
+.print-head{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding-bottom:16px;
+  margin-bottom:16px;
+  border-bottom:2px solid var(--accent);
+}
+.print-logo{width:48px;height:48px;object-fit:contain}
+.print-head-text{display:flex;flex-direction:column;gap:2px}
+.print-head-text strong{font-family:Georgia,serif;font-size:1.1rem}
+.print-head-text span{font-size:.85rem;color:var(--muted)}
+.print-title{font-weight:700;margin:0 0 2px}
+.print-date{font-size:.85rem;color:var(--muted);margin:0 0 18px}
+
+.accent-link{
+  display:inline-block;
+  padding:12px 20px;
+  border-radius:4px;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+}
+.accent-link:hover{background:var(--accent-dark)}
+
+@media print{
+  header, .progress-wrap, .actions, .footer-note,
+  #copyStatus, #sendStatus, .card > .eyebrow, .card > h2, .card > .success{
+    display:none !important;
+  }
+  body{background:#fff}
+  .shell{margin:0;width:100%}
+  .card{border:0;padding:0;margin:0}
+  .print-sheet{border:0;padding:0}
+}
 </style>
 </head>
 <body>
@@ -507,15 +550,39 @@ button:hover{filter:brightness(.97)}
     <div class="eyebrow">Récapitulatif</div>
     <h2>Votre projet est prêt à être transmis.</h2>
     <p class="success">✓ Questionnaire terminé</p>
-    <div id="summary" class="summary"></div>
+
+    <div id="printSheet" class="print-sheet">
+      <div class="print-head">
+        <img src="mark.png" alt="Air One Aero" class="print-logo">
+        <div class="print-head-text">
+          <strong>Air One Aero</strong>
+          <span>Erwan Cellerier &nbsp;·&nbsp; aironeaero@outlook.fr</span>
+        </div>
+      </div>
+      <p class="print-title">Récapitulatif de projet — <span id="printCompany"></span></p>
+      <p class="print-date" id="printDate"></p>
+      <div id="summary" class="summary"></div>
+    </div>
+
     <div class="actions">
       <button type="button" class="accent" id="sendBtn">Envoyer ma demande</button>
+      <button type="button" id="pdfBtn">Télécharger en PDF</button>
       <button type="button" class="secondary" id="editBtn">Modifier mes réponses</button>
       <button type="button" id="copyBtn">Copier le récapitulatif</button>
-      <button type="button" id="downloadBtn">Télécharger (.txt)</button>
     </div>
     <p id="sendStatus" class="label-help" role="status"></p>
     <p id="copyStatus" class="label-help"></p>
+  </section>
+
+  <section id="thanksCard" class="card hidden">
+    <div class="eyebrow">Envoyé</div>
+    <h2>Formulaire bien envoyé.</h2>
+    <p class="success">✓ Votre demande a été transmise</p>
+    <p>Merci, votre projet vient d'arriver dans ma boîte de réception. Je reviens vers vous rapidement pour en discuter.</p>
+    <div class="actions">
+      <a class="accent-link" href="index.html">Retour au site</a>
+      <button type="button" class="secondary" id="restartBtn">Faire une nouvelle demande</button>
+    </div>
   </section>
 
   <p class="footer-note">Questionnaire interactif — création de site internet</p>
@@ -534,7 +601,11 @@ button:hover{filter:brightness(.97)}
   const summary = document.getElementById('summary');
   const editBtn = document.getElementById('editBtn');
   const copyBtn = document.getElementById('copyBtn');
-  const downloadBtn = document.getElementById('downloadBtn');
+  const pdfBtn = document.getElementById('pdfBtn');
+  const thanksCard = document.getElementById('thanksCard');
+  const restartBtn = document.getElementById('restartBtn');
+  const printCompany = document.getElementById('printCompany');
+  const printDate = document.getElementById('printDate');
   const copyStatus = document.getElementById('copyStatus');
 
   let current = 0;
@@ -657,6 +728,10 @@ button:hover{filter:brightness(.97)}
         return;
       }
       summary.textContent = buildSummary();
+      printCompany.textContent = value('company') || 'Sans nom';
+      printDate.textContent = new Intl.DateTimeFormat('fr-FR', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      }).format(new Date());
       form.classList.add('hidden');
       summaryCard.classList.remove('hidden');
       window.scrollTo({top:0, behavior:'smooth'});
@@ -682,16 +757,17 @@ button:hover{filter:brightness(.97)}
     }
   });
 
-  downloadBtn.addEventListener('click', function(){
-    const blob = new Blob([summary.textContent], {type:'text/plain;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'questionnaire-projet-site.txt';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+  pdfBtn.addEventListener('click', function(){
+    window.print();
+  });
+
+  restartBtn.addEventListener('click', function(){
+    thanksCard.classList.add('hidden');
+    form.classList.remove('hidden');
+    form.reset();
+    current = 0;
+    showStep(0);
+    window.scrollTo({top:0, behavior:'smooth'});
   });
 
   // --- Envoi de la demande par e-mail (via Formspree) ---
@@ -723,8 +799,10 @@ button:hover{filter:brightness(.97)}
       });
 
       if (res.ok) {
-        sendStatus.textContent = '✓ Votre demande a bien été envoyée. Nous revenons vers vous rapidement.';
         sendBtn.textContent = 'Demande envoyée';
+        summaryCard.classList.add('hidden');
+        thanksCard.classList.remove('hidden');
+        window.scrollTo({top:0, behavior:'smooth'});
       } else {
         sendStatus.textContent = "L'envoi a échoué. Utilisez le bouton « Copier » et envoyez le récapitulatif par e-mail.";
         sendBtn.disabled = false;

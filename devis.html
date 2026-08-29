@@ -336,45 +336,6 @@ button:hover{filter:brightness(.97)}
   color:var(--muted2);
 }
 
-/* ===== Mode PDF : styles compacts appliques uniquement au clone hors ecran =====
-   html2canvas photographie l'element tel qu'il est affiche a l'ecran et ignore
-   totalement le bloc @media print ci-dessous. Sans ces regles, le rendu du PDF
-   depend de la largeur de la fenetre du visiteur : d'ou le debordement en 2 pages. */
-.pdf-mode{
-  width:794px;
-  padding:0;
-  margin:0;
-  border:0;
-  border-radius:0;
-  background:#fff;
-  font-size:13px;
-  line-height:1.35;
-}
-.pdf-mode .ps-head{padding-bottom:10px;margin-bottom:10px}
-.pdf-mode .ps-logo{width:44px;height:44px}
-.pdf-mode .ps-eyebrow{font-size:9px;margin-bottom:1px}
-.pdf-mode .ps-title{font-size:26px;margin:0 0 3px}
-.pdf-mode .ps-subtitle{font-size:11px}
-.pdf-mode .ps-idbar{margin-bottom:12px}
-.pdf-mode .ps-idbar > div{padding:6px 9px;min-width:0}
-.pdf-mode .ps-idbar strong{font-size:11px}
-.pdf-mode .ps-h3{font-size:13px;margin:11px 0 5px}
-.pdf-mode .ps-grid2 > .ps-cell{flex:1 1 45%;min-width:0}
-.pdf-mode .ps-cell{padding:6px 9px}
-.pdf-mode .ps-cell strong{font-size:11px}
-.pdf-mode .ps-idbar span,
-.pdf-mode .ps-cell span,
-.pdf-mode .ps-accentbar span{font-size:8.5px;margin-bottom:1px}
-.pdf-mode .ps-pair{gap:10px}
-.pdf-mode .ps-pair > .ps-block{flex:1 1 45%;min-width:0}
-.pdf-mode .ps-block{padding:9px}
-.pdf-mode .ps-block .ps-h3{font-size:12px;margin:0 0 5px}
-.pdf-mode .ps-block .ps-cell{padding:5px 0}
-.pdf-mode .ps-accentbar{margin:12px 0}
-.pdf-mode .ps-accentbar > div{padding:6px 9px;min-width:0}
-.pdf-mode .ps-accentbar strong{font-size:11px}
-.pdf-mode .ps-foot{margin-top:12px;padding-top:9px;font-size:10px}
-
 @media print{
   @page{size:A4;margin:13mm 13mm 10mm 13mm}
   header, .progress-wrap, .actions, .footer-note,
@@ -1067,10 +1028,8 @@ button:hover{filter:brightness(.97)}
   pdfBtn.addEventListener('click', function(){
     const original = pdfBtn.textContent;
 
-    if (typeof html2canvas === 'undefined' || !window.jspdf) {
-      // Bibliotheques non chargees (connexion coupee, bloqueur de script...) : on retombe
-      // sur l'impression navigateur, qui permet quand meme d'enregistrer en PDF.
-      sendStatus.textContent = 'Génération directe indisponible, ouverture de l\'impression…';
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      sendStatus.textContent = 'Génération PDF indisponible, ouverture de l’impression…';
       window.print();
       return;
     }
@@ -1079,98 +1038,225 @@ button:hover{filter:brightness(.97)}
     pdfBtn.textContent = 'Génération…';
     sendStatus.textContent = '';
 
-    const nomFichier =
-      'recapitulatif-' +
-      (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
-      '.pdf';
+    try {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      });
 
-    // On ne photographie jamais le recapitulatif tel qu'il est affiche : sa largeur
-    // depend de la fenetre du visiteur, donc sa hauteur aussi, donc le nombre de pages.
-    // On travaille sur une copie hors ecran de largeur fixe (794 px = 210 mm a 96 dpi)
-    // pour obtenir exactement le meme PDF quel que soit l'ecran.
-    const holder = document.createElement('div');
-    holder.style.cssText =
-      'position:absolute;left:-10000px;top:0;width:794px;' +
-      'background:#ffffff;pointer-events:none;z-index:-1;';
+      const W = 210;
+      const H = 297;
+      const M = 13;
+      const CW = W - M * 2;
 
-    const clone = printSheet.cloneNode(true);
-    clone.classList.add('pdf-mode');
-    // Les id dupliques feraient repondre getElementById sur la copie au lieu de
-    // l'original pendant la capture : on les retire.
-    clone.removeAttribute('id');
-    Array.prototype.forEach.call(clone.querySelectorAll('[id]'), function(el){
-      el.removeAttribute('id');
-    });
+      const C = {
+        cream: [242, 238, 230],
+        paper: [250, 247, 241],
+        white: [255, 255, 255],
+        navy: [11, 44, 61],
+        ink: [40, 51, 47],
+        muted: [110, 117, 111],
+        gold: [176, 128, 58],
+        paleGold: [244, 234, 221],
+        line: [215, 210, 200]
+      };
 
-    holder.appendChild(clone);
-    document.body.appendChild(holder);
+      function setFill(rgb){ pdf.setFillColor(rgb[0], rgb[1], rgb[2]); }
+      function setText(rgb){ pdf.setTextColor(rgb[0], rgb[1], rgb[2]); }
+      function box(x,y,w,h,fill,border=C.line,r=.8){
+        setFill(fill);
+        pdf.setDrawColor(border[0],border[1],border[2]);
+        pdf.setLineWidth(.25);
+        pdf.roundedRect(x,y,w,h,r,r,'FD');
+      }
+      function text(txt,x,y,size,font='normal',color=C.ink,align='left'){
+        pdf.setFont('helvetica',font);
+        pdf.setFontSize(size);
+        setText(color);
+        pdf.text(String(txt || '—'), x, y, {align});
+      }
+      function wrap(txt,maxW){
+        pdf.setFont('helvetica','normal');
+        return pdf.splitTextToSize(String(txt || '—'), maxW);
+      }
+      function cell(x,y,w,h,label,value, fill=C.white){
+        setFill(fill);
+        pdf.setDrawColor(C.line[0],C.line[1],C.line[2]);
+        pdf.setLineWidth(.22);
+        pdf.rect(x,y,w,h,'FD');
+        text(label,x+3,y+4.5,5.6,'normal',C.muted);
+        const lines = wrap(value || '—', w-6);
+        text(lines[0] || '—',x+3,y+9.4,7.1,'bold',C.ink);
+        if(lines.length>1){
+          text(lines[1],x+3,y+13.1,7.1,'bold',C.ink);
+        }
+      }
+      function sectionTitle(label,y){
+        text(label,M,y,9.6,'normal',C.navy);
+      }
 
-    function cleanup(){
-      if (holder.parentNode) { holder.parentNode.removeChild(holder); }
+      // Background
+      setFill(C.cream);
+      pdf.rect(0,0,W,H,'F');
+
+      // Header
+      const headerY = M;
+      const logoEl = printSheet.querySelector('.ps-logo');
+      if (logoEl && logoEl.complete && logoEl.naturalWidth) {
+        pdf.addImage(logoEl, 'PNG', M, headerY, 16, 16, undefined, 'FAST');
+      }
+
+      text('AIR ONE AERO', M+20, headerY+4.5, 5.8, 'bold', C.muted);
+      text('Récapitulatif de projet', M+20, headerY+12.2, 16.8, 'normal', C.navy);
+      text("Questionnaire de préparation - création d'un site internet professionnel",
+        M+20, headerY+17.6, 6.8, 'normal', C.muted);
+
+      pdf.setDrawColor(C.line[0],C.line[1],C.line[2]);
+      pdf.setLineWidth(.25);
+      pdf.line(M, headerY+21.5, W-M, headerY+21.5);
+
+      // Identity bar
+      let y = headerY + 25;
+      const idH = 13.5;
+      setFill(C.navy);
+      pdf.roundedRect(M,y,CW,idH,1.2,1.2,'F');
+
+      const labels = [
+        ['ENTREPRISE', value('company')],
+        ['CONTACT', value('contact')],
+        ['E-MAIL', value('email')],
+        ['TÉLÉPHONE', value('phone') || '—'],
+        ['DATE', new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(new Date())]
+      ];
+      const idW = CW / labels.length;
+
+      labels.forEach(function(item,i){
+        const x = M + idW*i;
+        if(i>0){
+          pdf.setDrawColor(60,82,92);
+          pdf.setLineWidth(.18);
+          pdf.line(x,y+1,x,y+idH-1);
+        }
+        text(item[0],x+3,y+4.2,4.8,'normal',[215,222,225]);
+        text(item[1],x+3,y+9.7,6.8,'bold',C.white);
+      });
+      y += idH + 4;
+
+      // 01
+      sectionTitle('01 · Votre activité',y);
+      y += 2.7;
+      const half = CW/2;
+      cell(M,y,half,13.8,'Activité',value('activity'));
+      cell(M+half,y,half,13.8,'Ville / zone',value('city'));
+      cell(M,y+13.8,half,13.8,'Site existant',form.querySelector('[name="existingSite"]:checked')?.value || '—');
+      cell(M+half,y+13.8,half,13.8,'Site actuel',value('existingUrl'));
+      y += 31;
+
+      // 02
+      sectionTitle('02 · Objectifs',y);
+      y += 2.7;
+      cell(M,y,half,13.8,'Objectifs',formatList(checkedValues('goals')));
+      cell(M+half,y,half,13.8,'Objectif principal',value('mainGoal'));
+      y += 16.2;
+
+      // 03
+      sectionTitle('03 · Contenu & identité',y);
+      y += 2.7;
+      cell(M,y,half,13.8,'Éléments disponibles',formatList(checkedValues('assets')));
+      cell(M+half,y,half,13.8,'Style souhaité',value('tone'));
+      cell(M,y+13.8,half,13.8,'Inspiration',value('inspiration'));
+      cell(M+half,y+13.8,half,13.8,'Couleurs / idées',value('brandNotes'));
+      y += 31;
+
+      // 04 + 05 side by side
+      const blockGap = 4;
+      const blockW = (CW-blockGap)/2;
+      const pairH = 30;
+      box(M,y,blockW,pairH,C.white);
+      box(M+blockW+blockGap,y,blockW,pairH,C.white);
+      text('04 · Pages',M+4,y+6,9.2,'normal',C.navy);
+      text('05 · Fonctionnalités',M+blockW+blockGap+4,y+6,9.2,'normal',C.navy);
+
+      text('Demandées',M+4,y+11,5.5,'normal',C.muted);
+      let lines = wrap(formatList(checkedValues('pages')),blockW-8);
+      text(lines[0] || '—',M+4,y+15.8,6.8,'bold',C.ink);
+      if(lines[1]) text(lines[1],M+4,y+19.2,6.8,'bold',C.ink);
+
+      text('Autres besoins',M+4,y+23.2,5.5,'normal',C.muted);
+      text((value('otherPages') || '—').slice(0,55),M+4,y+27.2,6.3,'bold',C.ink);
+
+      const rx=M+blockW+blockGap+4;
+      text('Souhaitées',rx,y+11,5.5,'normal',C.muted);
+      lines = wrap(formatList(checkedValues('features')),blockW-8);
+      text(lines[0] || '—',rx,y+15.8,6.6,'bold',C.ink);
+      if(lines[1]) text(lines[1],rx,y+19.2,6.6,'bold',C.ink);
+
+      text('Détails',rx,y+23.2,5.5,'normal',C.muted);
+      text((value('featureDetails') || '—').slice(0,55),rx,y+27.2,6.3,'bold',C.ink);
+      y += pairH + 5;
+
+      // 06 Visibility
+      sectionTitle('06 · Visibilité',y);
+      y += 2.7;
+      cell(M,y,half,13.8,'Mots-clés',value('keywords'));
+      cell(M+half,y,half,13.8,'Google Business Profile',value('googleProfile'));
+      cell(M,y+13.8,half,13.8,'Instagram',value('socialInstagram'));
+      cell(M+half,y+13.8,half,13.8,'Facebook',value('socialFacebook'));
+      y += 31;
+
+      // Accent bar
+      const accentH = 13.5;
+      setFill(C.gold);
+      pdf.roundedRect(M,y,CW,accentH,1.1,1.1,'F');
+      const aw=CW/4;
+      [
+        ['BUDGET',form.querySelector('[name="budget"]:checked')?.value || '—'],
+        ['MISE EN LIGNE',value('deadline') ? new Intl.DateTimeFormat('fr-FR').format(new Date(value('deadline')+'T12:00:00')) : '—'],
+        ['URGENCE',value('priority') || '—'],
+        ['DOMAINE',value('domain') || '—']
+      ].forEach(function(item,i){
+        const x=M+aw*i;
+        if(i>0){
+          pdf.setDrawColor(211,188,153); pdf.setLineWidth(.2);
+          pdf.line(x,y+1,x,y+accentH-1);
+        }
+        text(item[0],x+3,y+4.2,4.8,'normal',C.muted);
+        text(item[1],x+3,y+9.7,6.5,'bold',C.navy);
+      });
+      y += accentH + 5;
+
+      // Final info
+      cell(M,y,half,15,'Après mise en ligne',formatList(checkedValues('aftercare')));
+      cell(M+half,y,half,15,'Nom de domaine souhaité',value('domainName'));
+      cell(M,y+15,half,15,'Informations particulières',value('legal'));
+      cell(M+half,y+15,half,15,'Autres remarques',value('finalNotes'));
+      y += 35;
+
+      // Footer
+      pdf.setDrawColor(C.line[0],C.line[1],C.line[2]);
+      pdf.setLineWidth(.25);
+      pdf.line(M,y,W-M,y);
+      y += 5;
+      text('Air One Aero · Erwan Cellerier · aironeaero@outlook.fr',M,y,6.5,'normal',C.muted);
+      text('Merci pour votre confiance.',W-M,y,6.5,'normal',C.muted,'right');
+
+      const nomFichier =
+        'recapitulatif-' +
+        (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') +
+        '.pdf';
+
+      pdf.save(nomFichier);
       pdfBtn.disabled = false;
       pdfBtn.textContent = original;
+    } catch (err) {
+      pdfBtn.disabled = false;
+      pdfBtn.textContent = original;
+      sendStatus.textContent = 'Échec de la génération PDF (' + err.message + '). Ouverture de l’impression…';
+      window.print();
     }
-
-    html2canvas(clone, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      width: 794,
-      windowWidth: 1200   // sinon, sur telephone, la copie serait comprimee
-    })
-      .then(function(canvas){
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-
-        const pageWidth = 210, pageHeight = 297;
-        const marginX = 13, top = 16, bottom = 12;
-        const maxWidth = pageWidth - marginX * 2;      // 184 mm
-        const maxHeight = pageHeight - top - bottom;   // 269 mm
-
-        let imgWidth = maxWidth;
-        let imgHeight = canvas.height * imgWidth / canvas.width;
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
-        function decor(pageNum, total){
-          pdf.setFontSize(7.5);
-          pdf.setTextColor(150, 150, 150);
-          pdf.text('QUESTIONNAIRE PROJET SITE INTERNET', marginX, 10);
-          pdf.text('Air One Aero', pageWidth - marginX, 10, { align: 'right' });
-          pdf.text('Document de cadrage · confidentiel', marginX, pageHeight - 6);
-          pdf.text(total > 1 ? pageNum + ' / ' + total : String(pageNum),
-                   pageWidth - marginX, pageHeight - 6, { align: 'right' });
-        }
-
-        if (imgHeight <= maxHeight) {
-          // Cas nominal : tout tient sur une page.
-          pdf.addImage(imgData, 'JPEG', marginX, top, imgWidth, imgHeight);
-          decor(1, 1);
-        } else if (maxHeight / imgHeight >= 0.7) {
-          // Reponses un peu longues : on reduit legerement pour rester sur une page.
-          const ratio = maxHeight / imgHeight;
-          imgHeight = maxHeight;
-          imgWidth = maxWidth * ratio;
-          pdf.addImage(imgData, 'JPEG', (pageWidth - imgWidth) / 2, top, imgWidth, imgHeight);
-          decor(1, 1);
-        } else {
-          // Reponses tres longues : reduire davantage deviendrait illisible,
-          // on decoupe proprement sur plusieurs pages.
-          const total = Math.ceil(imgHeight / maxHeight);
-          for (let i = 0; i < total; i++) {
-            if (i > 0) { pdf.addPage(); }
-            pdf.addImage(imgData, 'JPEG', marginX, top - i * maxHeight, imgWidth, imgHeight);
-            decor(i + 1, total);
-          }
-        }
-
-        pdf.save(nomFichier);
-        cleanup();
-      })
-      .catch(function(err){
-        cleanup();
-        sendStatus.textContent = 'Échec de la génération PDF (' + err.message + '). Ouverture de l\'impression…';
-        window.print();
-      });
   });
 
   restartBtn.addEventListener('click', function(){

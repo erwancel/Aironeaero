@@ -352,6 +352,26 @@ button:hover{filter:brightness(.97)}
   .ps-cell{padding:6px 10px}
   .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:.55rem;
+  margin:0 0 12px;
+  white-space:nowrap;
+}
+.lang-switch a,.lang-switch span{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-decoration:none;
+}
+.lang-switch a{color:var(--muted)}
+.lang-switch a:hover{color:var(--ink)}
+.lang-switch .active{color:var(--ink);font-weight:700}
+.lang-sep{color:var(--line)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -366,8 +386,8 @@ button:hover{filter:brightness(.97)}
     <div class="eyebrow">Website project</div>
     <h1>Your project,<br>in a few minutes.</h1>
     <p class="lead">
-      Ce questionnaire me permet de comprendre votre activité, vos objectifs et vos attentes
-      avant de vous proposer une structure, un design et un devis adaptés.
+      This questionnaire helps me understand your business, goals and expectations
+      before I propose a suitable structure, design and quote.
     </p>
   </header>
 
@@ -403,7 +423,7 @@ button:hover{filter:brightness(.97)}
         </div>
         <div class="field">
           <label for="activity">Your business <span class="required">*</span></label>
-          <input id="activity" name="activity" placeholder="Restaurant, coiffeur, artisan..." required>
+          <input id="activity" name="activity" placeholder="Restaurant, hairdresser, craft business..." required>
         </div>
         <div class="field">
           <label for="city">City / service area</label>
@@ -427,20 +447,20 @@ button:hover{filter:brightness(.97)}
     <section class="card step" data-step="2">
       <div class="eyebrow">02 · Objectives</div>
       <h2>What should the website achieve for you?</h2>
-      <p class="label-help">Cochez tout ce qui correspond à votre besoin.</p>
+      <p class="label-help">Select everything that applies to your needs.</p>
 
       <div class="options">
-        <label class="option"><input type="checkbox" name="goals" value="Présenter l'entreprise"><span>Présenter clairement mon entreprise et mes services</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Present my business"><span>Clearly present my business and services</span></label>
         <label class="option"><input type="checkbox" name="goals" value="Être visible of Google"><span>Être mieux trouvé of Google</span></label>
-        <label class="option"><input type="checkbox" name="goals" value="Recevoir des contacts"><span>Recevoir des demandes de contact</span></label>
-        <label class="option"><input type="checkbox" name="goals" value="Prendre des réservations"><span>Permettre la prise de rendez-vous / réservations</span></label>
-        <label class="option"><input type="checkbox" name="goals" value="Vendre en ligne"><span>Vendre des produits ou services en ligne</span></label>
-        <label class="option"><input type="checkbox" name="goals" value="Rassurer"><span>Rassurer les clients avec une présence professionnelle</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Receive contact enquiries"><span>Receive contact enquiries</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Enable online booking"><span>Enable online booking / appointments</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Sell online"><span>Sell products or services online</span></label>
+        <label class="option"><input type="checkbox" name="goals" value="Reassure customers"><span>Reassure customers with a professional online presence</span></label>
       </div>
 
       <div class="field" style="margin-top:20px">
         <label for="mainGoal">Your #1 objective <span class="required">*</span></label>
-        <textarea id="mainGoal" name="mainGoal" placeholder="Ex. : recevoir plus de demandes de devis..." required></textarea>
+        <textarea id="mainGoal" name="mainGoal" placeholder="E.g. receive more quote requests..." required></textarea>
       </div>
     </section>
 
@@ -452,8 +472,8 @@ button:hover{filter:brightness(.97)}
         <label class="option"><input type="checkbox" name="assets" value="Logo"><span>Logo</span></label>
         <label class="option"><input type="checkbox" name="assets" value="Photos"><span>Professional photos</span></label>
         <label class="option"><input type="checkbox" name="assets" value="Textes"><span>Presentation text</span></label>
-        <label class="option"><input type="checkbox" name="assets" value="Tarifs / catalogue"><span>Prices, catalogue or menu</span></label>
-        <label class="option"><input type="checkbox" name="assets" value="Réseaux sociaux"><span>Active social media</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Prices / catalogue"><span>Prices, catalogue or menu</span></label>
+        <label class="option"><input type="checkbox" name="assets" value="Social media"><span>Active social media</span></label>
         <label class="option"><input type="checkbox" name="assets" value="Google Business Profile"><span>Google Business Profile</span></label>
       </div>
 
@@ -462,30 +482,30 @@ button:hover{filter:brightness(.97)}
           <label for="tone">Preferred style</label>
           <select id="tone" name="tone">
             <option value="">Choisir</option>
-            <option>Élégant / haut de gamme</option>
-            <option>Moderne / minimaliste</option>
-            <option>Chaleureux / convivial</option>
-            <option>Artisanal / authentique</option>
-            <option>Coloré / dynamique</option>
-            <option>Je ne sais pas encore</option>
+            <option>Elegant / premium</option>
+            <option>Modern / minimalist</option>
+            <option>Warm / welcoming</option>
+            <option>Artisanal / authentic</option>
+            <option>Colourful / dynamic</option>
+            <option>I don't know yet</option>
           </select>
         </div>
         <div class="field">
           <label for="inspiration">Websites you like</label>
-          <input id="inspiration" name="inspiration" placeholder="Liens ou noms de sites">
+          <input id="inspiration" name="inspiration" placeholder="Links or website names">
         </div>
       </div>
 
       <div class="field">
         <label for="brandNotes">Colours, constraints or ideas</label>
-        <textarea id="brandNotes" name="brandNotes" placeholder="Couleurs à conserver, éléments à éviter, ambiance souhaitée..."></textarea>
+        <textarea id="brandNotes" name="brandNotes" placeholder="Colours to keep, things to avoid, desired atmosphere..."></textarea>
       </div>
     </section>
 
     <section class="card step" data-step="4">
       <div class="eyebrow">04 · Pages</div>
       <h2>Que voulez-vous of le site ?</h2>
-      <p class="label-help">Je pourrai ensuite vous proposer une arborescence cohérente.</p>
+      <p class="label-help">I can then propose a coherent site structure.</p>
 
       <div class="options">
         <label class="option"><input type="checkbox" name="pages" value="Home" checked><span>Home</span></label>
@@ -499,7 +519,7 @@ button:hover{filter:brightness(.97)}
       </div>
 
       <div class="field" style="margin-top:20px">
-        <label for="otherPages">Autres pages ou besoins</label>
+        <label for="otherPages">Other pages or needs</label>
         <textarea id="otherPages" name="otherPages"></textarea>
       </div>
     </section>
@@ -514,14 +534,14 @@ button:hover{filter:brightness(.97)}
         <label class="option"><input type="checkbox" name="features" value="Online booking"><span>Online booking</span></label>
         <label class="option"><input type="checkbox" name="features" value="Online payment"><span>Online payment</span></label>
         <label class="option"><input type="checkbox" name="features" value="Boutique"><span>Shop / e-commerce</span></label>
-        <label class="option"><input type="checkbox" name="features" value="Multilingue"><span>Multilingual website</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Multilingual website"><span>Multilingual website</span></label>
         <label class="option"><input type="checkbox" name="features" value="Newsletter"><span>Newsletter</span></label>
-        <label class="option"><input type="checkbox" name="features" value="Réseaux sociaux"><span>Social media integration</span></label>
+        <label class="option"><input type="checkbox" name="features" value="Social media"><span>Social media integration</span></label>
       </div>
 
       <div class="field" style="margin-top:20px">
-        <label for="featureDetails">Détaillez vos besoins particuliers</label>
-        <textarea id="featureDetails" name="featureDetails" placeholder="Ex. : réservation pour 8 personnes maximum, paiement Stripe, etc."></textarea>
+        <label for="featureDetails">Tell me about any specific requirements</label>
+        <textarea id="featureDetails" name="featureDetails" placeholder="E.g. booking for up to 8 people, Stripe payments, etc."></textarea>
       </div>
     </section>
 
@@ -532,10 +552,10 @@ button:hover{filter:brightness(.97)}
       <div class="grid two">
         <div class="field">
           <label for="keywords">Important keywords</label>
-          <textarea id="keywords" name="keywords" placeholder="Ex. : coiffeur Nantes, restaurant Vannes..."></textarea>
+          <textarea id="keywords" name="keywords" placeholder="E.g. hairdresser in Nantes, restaurant in Vannes..."></textarea>
         </div>
         <div class="field">
-          <label for="googleProfile">Avez-vous une fiche Google Business Profile ?</label>
+          <label for="googleProfile">Do you have a Google Business Profile?</label>
           <select id="googleProfile" name="googleProfile">
             <option value="">Choisir</option>
             <option>Yes, elle existe</option>
@@ -572,7 +592,7 @@ button:hover{filter:brightness(.97)}
           <label class="option"><input type="radio" name="budget" value="1 000 – 2 000 €"><span>1 000 – 2 000 €</span></label>
           <label class="option"><input type="radio" name="budget" value="2 000 – 4 000 €"><span>2 000 – 4 000 €</span></label>
           <label class="option"><input type="radio" name="budget" value="> 4 000 €"><span>Plus de 4 000 €</span></label>
-          <label class="option"><input type="radio" name="budget" value="Je ne sais pas"><span>Je ne sais pas encore</span></label>
+          <label class="option"><input type="radio" name="budget" value="Je ne sais pas"><span>I don't know yet</span></label>
         </div>
       </div>
 
@@ -585,16 +605,16 @@ button:hover{filter:brightness(.97)}
           <label for="priority">Project urgency</label>
           <select id="priority" name="priority">
             <option value="">Choisir</option>
-            <option>Pas d'urgence</option>
-            <option>Dans les 1 à 2 mois</option>
-            <option>Dans les 2 à 4 semaines</option>
-            <option>Le plus rapidement possible</option>
+            <option>No rush</option>
+            <option>Within 1–2 months</option>
+            <option>Within 2–4 weeks</option>
+            <option>As soon as possible</option>
           </select>
         </div>
       </div>
 
       <div class="field">
-        <label>Souhaitez-vous un accompagnement après la mise en ligne ?</label>
+        <label>Would you like support after launch?</label>
         <div class="options">
           <label class="option"><input type="checkbox" name="aftercare" value="Maintenance"><span>Technical maintenance</span></label>
           <label class="option"><input type="checkbox" name="aftercare" value="Modifications"><span>Content updates</span></label>
@@ -626,22 +646,22 @@ button:hover{filter:brightness(.97)}
 
       <div class="field">
         <label for="legal">Particular information to take into account</label>
-        <textarea id="legal" name="legal" placeholder="Contraintes réglementaires, confidentialité, mentions légales déjà existantes, etc."></textarea>
+        <textarea id="legal" name="legal" placeholder="Regulatory constraints, privacy requirements, existing legal notices, etc."></textarea>
       </div>
 
       <div class="field">
         <label for="finalNotes">Anything else you would like to tell me?</label>
-        <textarea id="finalNotes" name="finalNotes" placeholder="Tout ce qui peut m'aider à comprendre votre projet."></textarea>
+        <textarea id="finalNotes" name="finalNotes" placeholder="Anything that can help me understand your project."></textarea>
       </div>
 
       <div class="notice">
-        <strong>Merci.</strong><br>
-        Une fois le questionnaire validé, le bouton ci-dessous génère un récapitulatif complet que vous pourrez me transmettre.
+        <strong>Thank you.</strong><br>
+        Once the questionnaire is completed, the button below generates a complete summary that you can send to me.
       </div>
 
       <label class="option">
         <input type="checkbox" id="consent" name="consent" required>
-        <span>J'accepte que les informations de ce questionnaire soient utilisées uniquement pour préparer mon projet de site internet. <span class="required">*</span></span>
+        <span>I agree that the information in this questionnaire may only be used to prepare my website project. <span class="required">*</span></span>
       </label>
     </section>
 
@@ -662,7 +682,7 @@ button:hover{filter:brightness(.97)}
         <div class="ps-head-text">
           <span class="ps-eyebrow">AIR ONE AERO</span>
           <h1 class="ps-title">Summary de projet</h1>
-          <p class="ps-subtitle">Questionnaire de préparation — création d'un site internet professionnel</p>
+          <p class="ps-subtitle">Preparation questionnaire — professional website creation</p>
         </div>
       </div>
 
@@ -738,8 +758,8 @@ button:hover{filter:brightness(.97)}
     </div>
 
     <div class="actions">
-      <button type="button" class="accent" id="sendBtn">Envoyer ma demande</button>
-      <button type="button" id="pdfBtn">Télécharger en PDF</button>
+      <button type="button" class="accent" id="sendBtn">Send my request</button>
+      <button type="button" id="pdfBtn">Download PDF</button>
       <button type="button" class="secondary" id="editBtn">Edit my answers</button>
       <button type="button" id="copyBtn">Copy summary</button>
     </div>
@@ -748,17 +768,17 @@ button:hover{filter:brightness(.97)}
   </section>
 
   <section id="thanksCard" class="card hidden">
-    <div class="eyebrow">Envoyé</div>
-    <h2>Formulaire bien envoyé.</h2>
-    <p class="success">✓ Votre demande a été transmise</p>
-    <p>Merci, votre projet vient d'arriver dans ma boîte de réception. Je reviens vers vous rapidement pour en discuter.</p>
+    <div class="eyebrow">Sent</div>
+    <h2>Form submitted successfully.</h2>
+    <p class="success">✓ Your request has been sent</p>
+    <p>Thank you, your project has reached my inbox. I will get back to you shortly to discuss it.</p>
     <div class="actions">
-      <a class="accent-link" href="index.html">Retour au site</a>
-      <button type="button" class="secondary" id="restartBtn">Faire une nouvelle demande</button>
+      <a class="accent-link" href="index-en.html">Back to website</a>
+      <button type="button" class="secondary" id="restartBtn">Submit another request</button>
     </div>
   </section>
 
-  <p class="footer-note">Questionnaire interactif — création de site internet</p>
+  <p class="footer-note">Interactive questionnaire — website creation</p>
 </div>
 
 <script>
@@ -824,62 +844,62 @@ button:hover{filter:brightness(.97)}
   }
 
   function formatList(arr){
-    return arr.length ? arr.join(', ') : 'Nonee sélection';
+    return arr.length ? arr.join(', ') : 'No selection';
   }
 
   function buildSummary(){
     const date = value('deadline');
-    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'No précisée';
+    const deadline = date ? new Intl.DateTimeFormat('en-GB').format(new Date(date + 'T12:00:00')) : 'Not specified';
 
     return [
       'QUESTIONNAIRE — PROJET DE SITE INTERNET',
       '=========================================',
       '',
       '1. ENTREPRISE',
-      'Entreprise : ' + value('company'),
-      'Contact : ' + value('contact'),
+      'Business: ' + value('company'),
+      'Contact: ' + value('contact'),
       'Email : ' + value('email'),
-      'Phone : ' + (value('phone') || 'No renseigné'),
-      'Activité : ' + value('activity'),
-      'Ville / zone : ' + (value('city') || 'No renseignée'),
-      'Site existant : ' + (form.querySelector('[name="existingSite"]:checked')?.value || 'No précisé'),
-      'Site actuel : ' + (value('existingUrl') || 'No renseigné'),
+      'Phone : ' + (value('phone') || 'Not provided'),
+      'Business type: ' + value('activity'),
+      'City / area: ' + (value('city') || 'Not provided'),
+      'Existing website: ' + (form.querySelector('[name="existingSite"]:checked')?.value || 'Not specified'),
+      'Current website: ' + (value('existingUrl') || 'Not provided'),
       '',
       '2. OBJECTIFS',
-      'Objectifs : ' + formatList(checkedValues('goals')),
-      'Objectif principal : ' + value('mainGoal'),
+      'Objectives: ' + formatList(checkedValues('goals')),
+      'Main objective: ' + value('mainGoal'),
       '',
       '3. CONTENU & IDENTITÉ',
-      'Éléments disponibles : ' + formatList(checkedValues('assets')),
-      'Preferred style : ' + (value('tone') || 'No précisé'),
-      'Sites d’inspiration : ' + (value('inspiration') || 'No renseigné'),
-      'Couleurs / contraintes / idées : ' + (value('brandNotes') || 'No renseignées'),
+      'Available assets: ' + formatList(checkedValues('assets')),
+      'Preferred style : ' + (value('tone') || 'Not specified'),
+      'Inspiration websites: ' + (value('inspiration') || 'Not provided'),
+      'Colours / constraints / ideas: ' + (value('brandNotes') || 'Not provided'),
       '',
       '4. PAGES',
-      'Pages souhaitées : ' + formatList(checkedValues('pages')),
-      'Autres pages / besoins : ' + (value('otherPages') || 'None'),
+      'Requested pages: ' + formatList(checkedValues('pages')),
+      'Other pages / needs: ' + (value('otherPages') || 'None'),
       '',
       '5. FONCTIONNALITÉS',
-      'Fonctionnalités : ' + formatList(checkedValues('features')),
-      'Détails : ' + (value('featureDetails') || 'None'),
+      'Features: ' + formatList(checkedValues('features')),
+      'Details: ' + (value('featureDetails') || 'None'),
       '',
       '6. VISIBILITÉ',
-      'Mots-clés : ' + (value('keywords') || 'No renseignés'),
-      'Google Business Profile : ' + (value('googleProfile') || 'No précisé'),
-      'Instagram : ' + (value('socialInstagram') || 'No renseigné'),
-      'Facebook : ' + (value('socialFacebook') || 'No renseigné'),
+      'Keywords: ' + (value('keywords') || 'No renseignés'),
+      'Google Business Profile : ' + (value('googleProfile') || 'Not specified'),
+      'Instagram : ' + (value('socialInstagram') || 'Not provided'),
+      'Facebook : ' + (value('socialFacebook') || 'Not provided'),
       '',
       '7. BUDGET & CALENDRIER',
-      'Budget : ' + (form.querySelector('[name="budget"]:checked')?.value || 'No précisé'),
-      'Mise en ligne souhaitée : ' + deadline,
-      'Urgence : ' + (value('priority') || 'No précisée'),
-      'Après mise en ligne : ' + formatList(checkedValues('aftercare')),
+      'Budget: ' + (form.querySelector('[name="budget"]:checked')?.value || 'Not specified'),
+      'Desired launch date: ' + deadline,
+      'Urgency: ' + (value('priority') || 'Not specified'),
+      'After launch: ' + formatList(checkedValues('aftercare')),
       '',
       '8. DOMAINE & AUTRES',
-      'Nom de domaine existant : ' + (value('domain') || 'No précisé'),
-      'Desired domain name : ' + (value('domainName') || 'No renseigné'),
-      'Informations particulières : ' + (value('legal') || 'Nonee'),
-      'Autres remarques : ' + (value('finalNotes') || 'Nonee'),
+      'Existing domain: ' + (value('domain') || 'Not specified'),
+      'Desired domain name : ' + (value('domainName') || 'Not provided'),
+      'Particular information: ' + (value('legal') || 'None'),
+      'Other notes: ' + (value('finalNotes') || 'None'),
       '',
       '=========================================',
       'Fin du questionnaire'
@@ -888,18 +908,18 @@ button:hover{filter:brightness(.97)}
 
   function buildSummarySections(){
     const date = value('deadline');
-    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'No précisée';
+    const deadline = date ? new Intl.DateTimeFormat('en-GB').format(new Date(date + 'T12:00:00')) : 'Not specified';
 
     return [
       { title: '1. Entreprise', rows: [
         ['Entreprise', value('company')],
         ['Contact', value('contact')],
         ['Email', value('email')],
-        ['Phone', value('phone') || 'No renseigné'],
+        ['Phone', value('phone') || 'Not provided'],
         ['Activité', value('activity')],
-        ['Ville / zone', value('city') || 'No renseignée'],
-        ['Site existant', form.querySelector('[name="existingSite"]:checked')?.value || 'No précisé'],
-        ['Site actuel', value('existingUrl') || 'No renseigné'],
+        ['Ville / zone', value('city') || 'Not provided'],
+        ['Site existant', form.querySelector('[name="existingSite"]:checked')?.value || 'Not specified'],
+        ['Site actuel', value('existingUrl') || 'Not provided'],
       ]},
       { title: '2. Objectifs', rows: [
         ['Objectifs', formatList(checkedValues('goals'))],
@@ -907,9 +927,9 @@ button:hover{filter:brightness(.97)}
       ]},
       { title: '3. Contenu & identité', rows: [
         ['Éléments disponibles', formatList(checkedValues('assets'))],
-        ['Preferred style', value('tone') || 'No précisé'],
-        ['Sites d’inspiration', value('inspiration') || 'No renseigné'],
-        ['Couleurs / contraintes / idées', value('brandNotes') || 'No renseignées'],
+        ['Preferred style', value('tone') || 'Not specified'],
+        ['Sites d’inspiration', value('inspiration') || 'Not provided'],
+        ['Couleurs / contraintes / idées', value('brandNotes') || 'Not provided'],
       ]},
       { title: '4. Pages', rows: [
         ['Pages souhaitées', formatList(checkedValues('pages'))],
@@ -921,21 +941,21 @@ button:hover{filter:brightness(.97)}
       ]},
       { title: '6. Visibilité', rows: [
         ['Mots-clés', value('keywords') || 'No renseignés'],
-        ['Google Business Profile', value('googleProfile') || 'No précisé'],
-        ['Instagram', value('socialInstagram') || 'No renseigné'],
-        ['Facebook', value('socialFacebook') || 'No renseigné'],
+        ['Google Business Profile', value('googleProfile') || 'Not specified'],
+        ['Instagram', value('socialInstagram') || 'Not provided'],
+        ['Facebook', value('socialFacebook') || 'Not provided'],
       ]},
       { title: '7. Budget & calendrier', rows: [
-        ['Budget', form.querySelector('[name="budget"]:checked')?.value || 'No précisé'],
+        ['Budget', form.querySelector('[name="budget"]:checked')?.value || 'Not specified'],
         ['Mise en ligne souhaitée', deadline],
-        ['Urgence', value('priority') || 'No précisée'],
+        ['Urgence', value('priority') || 'Not specified'],
         ['Après mise en ligne', formatList(checkedValues('aftercare'))],
       ]},
       { title: '8. Domaine & autres', rows: [
-        ['Nom de domaine existant', value('domain') || 'No précisé'],
-        ['Desired domain name', value('domainName') || 'No renseigné'],
-        ['Informations particulières', value('legal') || 'Nonee'],
-        ['Autres remarques', value('finalNotes') || 'Nonee'],
+        ['Nom de domaine existant', value('domain') || 'Not specified'],
+        ['Desired domain name', value('domainName') || 'Not provided'],
+        ['Informations particulières', value('legal') || 'None'],
+        ['Autres remarques', value('finalNotes') || 'None'],
       ]},
     ];
   }
@@ -947,7 +967,7 @@ button:hover{filter:brightness(.97)}
 
   function renderSummary(){
     const date = value('deadline');
-    const deadline = date ? new Intl.DateTimeFormat('fr-FR').format(new Date(date + 'T12:00:00')) : 'À préciser';
+    const deadline = date ? new Intl.DateTimeFormat('en-GB').format(new Date(date + 'T12:00:00')) : 'To be specified';
     const today = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
 
     fillField('pCompany', value('company'));
@@ -1025,7 +1045,7 @@ button:hover{filter:brightness(.97)}
       await navigator.clipboard.writeText(buildSummary());
       copyStatus.textContent = 'Summary copié dans le presse-papiers.';
     }catch(e){
-      copyStatus.textContent = 'La copie automatique est bloquée par le navigateur. Sélectionnez le texte et copiez-le manuellement.';
+      copyStatus.textContent = 'Automatic copy is blocked by the browser. Select and copy the text manually.';
     }
   });
 
@@ -1035,7 +1055,7 @@ button:hover{filter:brightness(.97)}
     if (typeof html2canvas === 'undefined' || !window.jspdf) {
       // Bibliotheques non chargees (connexion coupee, bloqueur de script...) : on retombe
       // of l'impression navigateur, qui permet quand meme d'enregistrer en PDF.
-      sendStatus.textContent = 'Génération directe indisponible, ouverture de l\'impression…';
+      sendStatus.textContent = 'Direct PDF generation unavailable; opening print dialog…';
       window.print();
       return;
     }
@@ -1079,7 +1099,7 @@ button:hover{filter:brightness(.97)}
       .catch(function(err){
         pdfBtn.disabled = false;
         pdfBtn.textContent = original;
-        sendStatus.textContent = 'Échec de la génération PDF (' + err.message + '). Ouverture de l\'impression…';
+        sendStatus.textContent = 'PDF generation failed (' + err.message + '). Ouverture de l\'impression…';
         window.print();
       });
   });
@@ -1106,11 +1126,11 @@ button:hover{filter:brightness(.97)}
     sendStatus.textContent = 'Envoi en cours…';
 
     const payload = {
-      _subject: 'Nouvelle demande de site — ' + (value('company') || 'sans nom'),
+      _subject: 'New website request — ' + (value('company') || 'unnamed'),
       entreprise: value('company'),
       contact: value('contact'),
       email: value('email'),
-      telephone: value('phone') || 'No renseigné',
+      telephone: value('phone') || 'Not provided',
       recapitulatif: buildSummary()
     };
 
@@ -1122,7 +1142,7 @@ button:hover{filter:brightness(.97)}
       });
 
       if (res.ok) {
-        sendBtn.textContent = 'Demande envoyée';
+        sendBtn.textContent = 'Request sent';
         summaryCard.classList.add('hidden');
         thanksCard.classList.remove('hidden');
         window.scrollTo({top:0, behavior:'smooth'});

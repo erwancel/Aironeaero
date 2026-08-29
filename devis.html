@@ -352,11 +352,31 @@ button:hover{filter:brightness(.97)}
   .ps-cell{padding:6px 10px}
   .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:.55rem;
+  margin:0 0 12px;
+  white-space:nowrap;
+}
+.lang-switch a,.lang-switch span{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:.72rem;
+  letter-spacing:.12em;
+  text-decoration:none;
+}
+.lang-switch a{color:var(--muted)}
+.lang-switch a:hover{color:var(--ink)}
+.lang-switch .active{color:var(--ink);font-weight:700}
+.lang-sep{color:var(--line)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
-<div class="shell">
+<div class="shell"><div class="lang-switch" aria-label="Language selection"><span class="active">FR</span><span class="lang-sep">/</span><a href="devis-en.html">EN</a></div>
   <header>
     <div class="eyebrow">Projet de création de site</div>
     <h1>Votre projet,<br>en quelques minutes.</h1>

@@ -353,7 +353,6 @@ button:hover{filter:brightness(.97)}
   .ps-idbar > div, .ps-accentbar > div{padding:6px 10px}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
@@ -1078,9 +1077,18 @@ button:hover{filter:brightness(.97)}
         setText(color);
         pdf.text(String(txt || '—'), x, y, {align});
       }
-      function wrap(txt,maxW){
-        pdf.setFont('helvetica','normal');
+      function wrap(txt,maxW,size,style){
+        // La mesure DOIT se faire avec la taille et la graisse d'affichage,
+        // sinon splitTextToSize calcule les retours a la ligne avec la taille
+        // encore active (celle du libelle) et les lignes debordent de la cellule.
+        pdf.setFont('helvetica',style || 'bold');
+        pdf.setFontSize(size || 7.1);
         return pdf.splitTextToSize(String(txt || '—'), maxW);
+      }
+      function oneLine(txt,maxW,size){
+        const l = wrap(txt,maxW,size,'bold');
+        if(l.length <= 1) return l[0] || '—';
+        return String(l[0]).replace(/\s*\S{0,2}$/,'…');
       }
       function cell(x,y,w,h,label,value, fill=C.white){
         setFill(fill);
@@ -1088,11 +1096,27 @@ button:hover{filter:brightness(.97)}
         pdf.setLineWidth(.22);
         pdf.rect(x,y,w,h,'FD');
         text(label,x+3,y+4.5,5.6,'normal',C.muted);
-        const lines = wrap(value || '—', w-6);
-        text(lines[0] || '—',x+3,y+9.4,7.1,'bold',C.ink);
-        if(lines.length>1){
-          text(lines[1],x+3,y+13.1,7.1,'bold',C.ink);
+
+        const v = (value === undefined || value === null || String(value).trim() === '')
+          ? '—' : String(value);
+
+        // On reduit la taille tant que le texte ne rentre pas, plutot que de le
+        // couper en silence. L'interligne suit la taille retenue.
+        let size = 7.1, lh, maxLines, lines;
+        for(;;){
+          lh = size * 0.522;
+          maxLines = 1 + Math.floor((h - 10.05) / lh);
+          lines = wrap(v, w - 6, size, 'bold');
+          if(lines.length <= maxLines || size <= 5.2) break;
+          size -= 0.3;
         }
+        if(lines.length > maxLines){
+          lines = lines.slice(0, maxLines);
+          lines[maxLines-1] = String(lines[maxLines-1]).replace(/\s*\S{0,2}$/,'…');
+        }
+        lines.forEach(function(l,i){
+          text(l, x+3, y+9.4+i*lh, size, 'bold', C.ink);
+        });
       }
       function sectionTitle(label,y){
         text(label,M,y,9.6,'normal',C.navy);
@@ -1181,21 +1205,23 @@ button:hover{filter:brightness(.97)}
       text('05 · Fonctionnalités',M+blockW+blockGap+4,y+6,9.2,'normal',C.navy);
 
       text('Demandées',M+4,y+11,5.5,'normal',C.muted);
-      let lines = wrap(formatList(checkedValues('pages')),blockW-8);
+      let lines = wrap(formatList(checkedValues('pages')),blockW-8,6.8,'bold');
       text(lines[0] || '—',M+4,y+15.8,6.8,'bold',C.ink);
-      if(lines[1]) text(lines[1],M+4,y+19.2,6.8,'bold',C.ink);
+      if(lines[1]) text(lines.length>2 ? String(lines[1]).replace(/\s*\S{0,2}$/,'…') : lines[1],
+                        M+4,y+19.2,6.8,'bold',C.ink);
 
       text('Autres besoins',M+4,y+23.2,5.5,'normal',C.muted);
-      text((value('otherPages') || '—').slice(0,55),M+4,y+27.2,6.3,'bold',C.ink);
+      text(oneLine(value('otherPages'),blockW-8,6.3),M+4,y+27.2,6.3,'bold',C.ink);
 
       const rx=M+blockW+blockGap+4;
       text('Souhaitées',rx,y+11,5.5,'normal',C.muted);
-      lines = wrap(formatList(checkedValues('features')),blockW-8);
+      lines = wrap(formatList(checkedValues('features')),blockW-8,6.6,'bold');
       text(lines[0] || '—',rx,y+15.8,6.6,'bold',C.ink);
-      if(lines[1]) text(lines[1],rx,y+19.2,6.6,'bold',C.ink);
+      if(lines[1]) text(lines.length>2 ? String(lines[1]).replace(/\s*\S{0,2}$/,'…') : lines[1],
+                        rx,y+19.2,6.6,'bold',C.ink);
 
       text('Détails',rx,y+23.2,5.5,'normal',C.muted);
-      text((value('featureDetails') || '—').slice(0,55),rx,y+27.2,6.3,'bold',C.ink);
+      text(oneLine(value('featureDetails'),blockW-8,6.3),rx,y+27.2,6.3,'bold',C.ink);
       y += pairH + 5;
 
       // 06 Visibility

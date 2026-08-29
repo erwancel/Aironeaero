@@ -336,6 +336,45 @@ button:hover{filter:brightness(.97)}
   color:var(--muted2);
 }
 
+/* ===== Mode PDF : styles compacts appliques uniquement au clone hors ecran =====
+   html2canvas photographie l'element tel qu'il est affiche a l'ecran et ignore
+   totalement le bloc @media print ci-dessous. Sans ces regles, le rendu du PDF
+   depend de la largeur de la fenetre du visiteur : d'ou le debordement en 2 pages. */
+.pdf-mode{
+  width:794px;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:#fff;
+  font-size:13px;
+  line-height:1.35;
+}
+.pdf-mode .ps-head{padding-bottom:10px;margin-bottom:10px}
+.pdf-mode .ps-logo{width:44px;height:44px}
+.pdf-mode .ps-eyebrow{font-size:9px;margin-bottom:1px}
+.pdf-mode .ps-title{font-size:26px;margin:0 0 3px}
+.pdf-mode .ps-subtitle{font-size:11px}
+.pdf-mode .ps-idbar{margin-bottom:12px}
+.pdf-mode .ps-idbar > div{padding:6px 9px;min-width:0}
+.pdf-mode .ps-idbar strong{font-size:11px}
+.pdf-mode .ps-h3{font-size:13px;margin:11px 0 5px}
+.pdf-mode .ps-grid2 > .ps-cell{flex:1 1 45%;min-width:0}
+.pdf-mode .ps-cell{padding:6px 9px}
+.pdf-mode .ps-cell strong{font-size:11px}
+.pdf-mode .ps-idbar span,
+.pdf-mode .ps-cell span,
+.pdf-mode .ps-accentbar span{font-size:8.5px;margin-bottom:1px}
+.pdf-mode .ps-pair{gap:10px}
+.pdf-mode .ps-pair > .ps-block{flex:1 1 45%;min-width:0}
+.pdf-mode .ps-block{padding:9px}
+.pdf-mode .ps-block .ps-h3{font-size:12px;margin:0 0 5px}
+.pdf-mode .ps-block .ps-cell{padding:5px 0}
+.pdf-mode .ps-accentbar{margin:12px 0}
+.pdf-mode .ps-accentbar > div{padding:6px 9px;min-width:0}
+.pdf-mode .ps-accentbar strong{font-size:11px}
+.pdf-mode .ps-foot{margin-top:12px;padding-top:9px;font-size:10px}
+
 @media print{
   @page{size:A4;margin:13mm 13mm 10mm 13mm}
   header, .progress-wrap, .actions, .footer-note,
@@ -1045,36 +1084,90 @@ button:hover{filter:brightness(.97)}
       (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') +
       '.pdf';
 
-    html2canvas(printSheet, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
+    // On ne photographie jamais le recapitulatif tel qu'il est affiche : sa largeur
+    // depend de la fenetre du visiteur, donc sa hauteur aussi, donc le nombre de pages.
+    // On travaille sur une copie hors ecran de largeur fixe (794 px = 210 mm a 96 dpi)
+    // pour obtenir exactement le meme PDF quel que soit l'ecran.
+    const holder = document.createElement('div');
+    holder.style.cssText =
+      'position:absolute;left:-10000px;top:0;width:794px;' +
+      'background:#ffffff;pointer-events:none;z-index:-1;';
+
+    const clone = printSheet.cloneNode(true);
+    clone.classList.add('pdf-mode');
+    // Les id dupliques feraient repondre getElementById sur la copie au lieu de
+    // l'original pendant la capture : on les retire.
+    clone.removeAttribute('id');
+    Array.prototype.forEach.call(clone.querySelectorAll('[id]'), function(el){
+      el.removeAttribute('id');
+    });
+
+    holder.appendChild(clone);
+    document.body.appendChild(holder);
+
+    function cleanup(){
+      if (holder.parentNode) { holder.parentNode.removeChild(holder); }
+      pdfBtn.disabled = false;
+      pdfBtn.textContent = original;
+    }
+
+    html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      width: 794,
+      windowWidth: 1200   // sinon, sur telephone, la copie serait comprimee
+    })
       .then(function(canvas){
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
 
-        const pageWidth = 210, pageHeight = 297, margin = 10;
-        const imgWidth = pageWidth - margin * 2;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const pageWidth = 210, pageHeight = 297;
+        const marginX = 13, top = 16, bottom = 12;
+        const maxWidth = pageWidth - marginX * 2;      // 184 mm
+        const maxHeight = pageHeight - top - bottom;   // 269 mm
+
+        let imgWidth = maxWidth;
+        let imgHeight = canvas.height * imgWidth / canvas.width;
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
 
-        let heightLeft = imgHeight;
-        let position = margin;
+        function decor(pageNum, total){
+          pdf.setFontSize(7.5);
+          pdf.setTextColor(150, 150, 150);
+          pdf.text('QUESTIONNAIRE PROJET SITE INTERNET', marginX, 10);
+          pdf.text('Air One Aero', pageWidth - marginX, 10, { align: 'right' });
+          pdf.text('Document de cadrage · confidentiel', marginX, pageHeight - 6);
+          pdf.text(total > 1 ? pageNum + ' / ' + total : String(pageNum),
+                   pageWidth - marginX, pageHeight - 6, { align: 'right' });
+        }
 
-        pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-        heightLeft -= (pageHeight - margin * 2);
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight + margin;
-          pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
-          heightLeft -= (pageHeight - margin * 2);
+        if (imgHeight <= maxHeight) {
+          // Cas nominal : tout tient sur une page.
+          pdf.addImage(imgData, 'JPEG', marginX, top, imgWidth, imgHeight);
+          decor(1, 1);
+        } else if (maxHeight / imgHeight >= 0.7) {
+          // Reponses un peu longues : on reduit legerement pour rester sur une page.
+          const ratio = maxHeight / imgHeight;
+          imgHeight = maxHeight;
+          imgWidth = maxWidth * ratio;
+          pdf.addImage(imgData, 'JPEG', (pageWidth - imgWidth) / 2, top, imgWidth, imgHeight);
+          decor(1, 1);
+        } else {
+          // Reponses tres longues : reduire davantage deviendrait illisible,
+          // on decoupe proprement sur plusieurs pages.
+          const total = Math.ceil(imgHeight / maxHeight);
+          for (let i = 0; i < total; i++) {
+            if (i > 0) { pdf.addPage(); }
+            pdf.addImage(imgData, 'JPEG', marginX, top - i * maxHeight, imgWidth, imgHeight);
+            decor(i + 1, total);
+          }
         }
 
         pdf.save(nomFichier);
-        pdfBtn.disabled = false;
-        pdfBtn.textContent = original;
+        cleanup();
       })
       .catch(function(err){
-        pdfBtn.disabled = false;
-        pdfBtn.textContent = original;
+        cleanup();
         sendStatus.textContent = 'Échec de la génération PDF (' + err.message + '). Ouverture de l\'impression…';
         window.print();
       });

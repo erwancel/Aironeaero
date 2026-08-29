@@ -1274,7 +1274,16 @@ button:hover{filter:brightness(.97)}
         (value('company') || 'projet').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') +
         '.pdf';
 
+      pdf.setProperties({
+        title: 'Récapitulatif de projet — Air One Aero',
+        subject: 'Document de cadrage — mise en page v2',
+        creator: 'Air One Aero'
+      });
+
       pdf.save(nomFichier);
+      // Marqueur de version : visible a l'ecran apres le clic, jamais dans le PDF
+      // du client. S'il n'apparait pas, c'est l'ancien fichier qui tourne.
+      sendStatus.textContent = 'PDF téléchargé — mise en page v2.';
       pdfBtn.disabled = false;
       pdfBtn.textContent = original;
     } catch (err) {

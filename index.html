@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Air One Aero — Services & projets</title>
-<meta name="description" content="Air One Aero — développement web et applications sur mesure, convoyage de véhicules et projets numériques.">
+<title>Air One Aero — Erwan Cellerier</title>
+<meta name="description" content="Air One Aero — Erwan Cellerier. Développement web, applications sur mesure et convoyage de véhicules.">
 <link rel="icon" href="mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --navy:#0B2C3D;
@@ -34,141 +35,131 @@ body{
 }
 a{color:inherit}
 img{max-width:100%;display:block}
-.serif{
-  font-family:'Instrument Serif',Georgia,'Times New Roman',serif;
-  font-weight:400;line-height:.98;letter-spacing:-.02em;
-}
-.mono{
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
-  text-transform:uppercase;letter-spacing:.18em;
-}
+.serif{font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-weight:400;line-height:.98;letter-spacing:-.02em}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;text-transform:uppercase;letter-spacing:.18em}
 .wrap{width:min(var(--max),calc(100% - 2*var(--pad)));margin:auto}
-.rule{height:1px;background:var(--line)}
 .eyebrow{font-size:.68rem;letter-spacing:.24em;color:var(--gold)}
 
 header{
-  padding:1rem var(--pad);
+  padding:1rem var(--pad);min-height:76px;
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
   border-bottom:1px solid var(--line);
-  min-height:76px;
 }
 .brand{display:flex;align-items:center;gap:.75rem;text-decoration:none;min-width:0}
 .brand img{width:42px;height:42px;object-fit:contain;flex:0 0 auto}
 .brand span{font-size:.68rem;letter-spacing:.2em;color:var(--navy);white-space:nowrap}
 nav{display:flex;align-items:center;gap:1.2rem}
-nav a{
-  text-decoration:none;font-size:.8rem;color:var(--muted);
-  padding:.45rem .1rem;
-}
-nav a:hover,nav a.active{color:var(--navy)}
-.nav-cta{
-  padding:.62rem .85rem;border:1px solid var(--navy);color:var(--navy);
-}
+nav a{text-decoration:none;font-size:.8rem;color:var(--muted);padding:.45rem .1rem}
+nav a:hover{color:var(--navy)}
+.nav-cta{padding:.62rem .85rem;border:1px solid var(--navy);color:var(--navy)}
 .nav-cta:hover{background:var(--navy);color:var(--cream)}
 
-.hero{padding:clamp(4rem,10vw,8rem) 0 clamp(4rem,9vw,7rem)}
+.hero{
+  padding:clamp(4rem,9vw,7rem) 0 clamp(4rem,8vw,6rem);
+}
 .hero-grid{
-  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
-  gap:clamp(2rem,7vw,7rem);align-items:end
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);
+  gap:clamp(2rem,7vw,7rem);
+  align-items:center;
 }
 .hero h1{
-  margin:1rem 0 0;max-width:11ch;font-size:clamp(4rem,10vw,8rem);color:var(--navy)
+  margin:1rem 0 1.2rem;
+  max-width:10ch;
+  font-size:clamp(4rem,9.6vw,8rem);
+  color:var(--navy);
 }
 .hero h1 span{color:var(--slate)}
-.hero-copy{margin:0;max-width:40ch;color:#4f5b56;font-size:1.08rem}
+.hero-copy{max-width:38ch;margin:0;color:#4f5b56;font-size:1.05rem}
 .hero-meta{display:flex;align-items:center;gap:1rem;margin-top:2rem}
-.hero-meta .rule{flex:1;background:rgba(11,44,61,.22)}
+.hero-meta .rule{height:1px;flex:1;background:rgba(11,44,61,.22)}
 .hero-meta .mono{font-size:.62rem;color:var(--gold);white-space:nowrap}
 
-.intro{
-  padding:0 0 clamp(4rem,8vw,6rem);
+.portrait{
+  position:relative;
+  max-width:430px;
+  margin-left:auto;
 }
-.intro-grid{
-  display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)
+.portrait img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  object-position:center 36%;
+  background:var(--paper);
+  border:1px solid rgba(11,44,61,.14);
 }
-.intro-card{padding:clamp(1.5rem,4vw,3rem);background:var(--paper)}
-.intro-card + .intro-card{border-left:1px solid var(--line)}
-.intro-card h2{margin:.7rem 0 1rem;font-size:clamp(2.2rem,4.5vw,4rem);color:var(--navy)}
-.intro-card p{margin:0;color:var(--muted);max-width:42ch}
-.intro-card a{
-  display:inline-flex;margin-top:1.5rem;text-decoration:none;
-  border-bottom:1px solid var(--line);padding-bottom:.35rem;color:var(--navy)
+.portrait-caption{
+  margin-top:.7rem;
+  display:flex;
+  justify-content:space-between;
+  gap:1rem;
+  font-size:.68rem;
+  color:var(--muted);
 }
-.intro-card a:hover{color:var(--gold);border-color:var(--gold)}
+.portrait-caption .mono{font-size:.58rem;color:var(--gold)}
 
-.dark{background:var(--navy);color:var(--cream)}
-.dark .section-title,.dark h2{color:var(--cream)}
-.section{padding:clamp(4rem,8vw,7rem) 0}
-.section-head{display:flex;justify-content:space-between;gap:2rem;align-items:end;margin-bottom:2.4rem}
-.section-head h2{margin:.7rem 0 0;font-size:clamp(2.6rem,5.8vw,5rem);color:var(--navy)}
-.section-head p{max-width:38ch;margin:0;color:var(--muted)}
-.dark .section-head p{color:#bcc8c8}
+.activities{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.activities-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.activity{
+  padding:clamp(2rem,5vw,4rem) 0;
+  max-width:520px;
+}
+.activity + .activity{
+  border-left:1px solid var(--line);
+  padding-left:clamp(1.5rem,4vw,4rem);
+  margin-left:clamp(1.5rem,4vw,4rem);
+}
+.activity h2{margin:.7rem 0 .9rem;font-size:clamp(2.2rem,4.8vw,4rem);color:var(--navy)}
+.activity p{margin:0;color:var(--muted);max-width:42ch}
+.activity a{
+  display:inline-block;margin-top:1.2rem;padding-bottom:.3rem;
+  text-decoration:none;border-bottom:1px solid var(--line);font-size:.8rem;color:var(--navy)
+}
+.activity a:hover{color:var(--gold);border-color:var(--gold)}
 
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-.card{
-  padding:clamp(1.5rem,4vw,3rem);background:var(--paper);border:1px solid var(--line);
-  min-height:330px;display:flex;flex-direction:column
+.about{
+  padding:clamp(4rem,9vw,7rem) 0;
 }
-.card.dark-card{background:transparent;border-color:var(--dark-line)}
-.card h3{margin:.7rem 0 .8rem;font-size:clamp(2.1rem,4vw,3.3rem);color:var(--navy)}
-.dark .card h3{color:var(--cream)}
-.card p{color:var(--muted);max-width:46ch}
-.dark .card p{color:#c2cccc}
-.card a{margin-top:auto;width:max-content;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:.35rem}
-.dark .card a{border-color:var(--dark-line);color:var(--cream)}
-.dark .card a:hover{border-color:var(--gold);color:var(--gold)}
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);
+  gap:clamp(2rem,7vw,7rem);
+  align-items:start;
+}
+.about h2{margin:.7rem 0 0;font-size:clamp(2.5rem,5.2vw,5rem);color:var(--navy)}
+.about-copy p{margin:0 0 1rem;color:#53615b;max-width:58ch}
+.about-link{
+  display:inline-block;margin-top:.5rem;text-decoration:none;
+  color:var(--navy);border-bottom:1px solid var(--line);padding-bottom:.3rem;font-size:.8rem
+}
+.about-link:hover{color:var(--gold);border-color:var(--gold)}
 
-.project-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-.project{
-  padding:1.5rem;border:1px solid var(--dark-line);min-height:270px;
-  display:flex;flex-direction:column
-}
-.project .tag{font-size:.63rem;color:var(--gold)}
-.project h3{margin:auto 0 .7rem;font-size:clamp(2rem,4vw,3rem)}
-.project p{margin:0;color:#c4cecb}
-.project a{margin-top:1.4rem;text-decoration:none;color:var(--cream)}
-
-.page-hero{padding:clamp(4rem,9vw,7rem) 0 clamp(3rem,7vw,5rem)}
-.page-hero h1{
-  margin:1rem 0 1.2rem;max-width:12ch;font-size:clamp(4rem,9vw,7.5rem);color:var(--navy)
-}
-.page-hero p{max-width:52ch;color:var(--muted);font-size:1.05rem}
-
-.detail{
-  padding:clamp(4rem,8vw,7rem) 0;border-top:1px solid var(--line)
-}
-.detail-grid{
-  display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);
-  gap:clamp(2rem,6vw,6rem);align-items:start
-}
-.detail h2{margin:0;font-size:clamp(2.4rem,5vw,4.8rem);color:var(--navy)}
-.detail-copy p{margin:0 0 1rem;color:#52615b;max-width:62ch}
-.pill-list{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.7rem}
-.pill{
-  border:1px solid var(--line);padding:.55rem .7rem;color:var(--navy);background:var(--paper);
-  font-size:.78rem
-}
-.detail-boxes{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2rem}
-.detail-box{padding:1.3rem;border:1px solid var(--line);background:var(--paper)}
-.detail-box .mono{font-size:.6rem;color:var(--gold)}
-.detail-box h3{margin:.55rem 0 .35rem;font-size:1.2rem;color:var(--navy)}
-.detail-box p{margin:0;color:var(--muted);font-size:.9rem}
-
-.cta{padding:clamp(4rem,10vw,8rem) 0}
+.cta{padding:0 0 clamp(4rem,9vw,7rem)}
 .cta-box{
-  background:var(--gold-soft);border:1px solid rgba(176,128,58,.35);
-  padding:clamp(2rem,6vw,4.5rem);display:grid;
-  grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:2rem
+  background:var(--gold-soft);
+  border:1px solid rgba(176,128,58,.35);
+  padding:clamp(2rem,5vw,4rem);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:2rem;
 }
-.cta h2{margin:.7rem 0 0;font-size:clamp(2.8rem,6vw,5.5rem);max-width:10ch;color:var(--navy)}
-.cta p{max-width:45ch;color:#58645f}
-.cta-actions{display:flex;flex-direction:column;align-items:flex-end;gap:.7rem}
+.cta h2{margin:.7rem 0 0;font-size:clamp(2.8rem,6vw,5.3rem);max-width:10ch;color:var(--navy)}
+.cta p{max-width:44ch;color:#58645f}
+.cta-actions{display:flex;flex-direction:column;align-items:flex-end;gap:.75rem}
 .button{
   display:inline-block;text-decoration:none;padding:.85rem 1.2rem;
   background:var(--navy);color:var(--cream);border:1px solid var(--navy);font-size:.82rem
 }
 .button:hover{background:transparent;color:var(--navy)}
 .text-link{font-size:.78rem;color:var(--muted);text-decoration:none}
+.text-link:hover{color:var(--navy)}
 
 footer{background:var(--navy-2);color:var(--cream);padding:2.2rem 0}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -178,106 +169,92 @@ footer{background:var(--navy-2);color:var(--cream);padding:2.2rem 0}
 
 @media(max-width:820px){
   nav a:not(.nav-cta){display:none}
-  .hero-grid,.intro-grid,.cards,.project-list,.detail-grid{grid-template-columns:1fr}
-  .intro-card + .intro-card{border-left:0;border-top:1px solid var(--line)}
-  .section-head{display:block}
-  .section-head p{margin-top:1rem}
-  .detail-boxes{grid-template-columns:1fr}
+  .hero-grid,.activities-grid,.about-grid{grid-template-columns:1fr}
+  .portrait{margin:0;max-width:520px}
+  .activity + .activity{
+    border-left:0;border-top:1px solid var(--line);
+    padding-left:0;margin-left:0;
+  }
   .cta-box{grid-template-columns:1fr}
   .cta-actions{align-items:flex-start}
 }
 @media(max-width:520px){
-  .hero h1,.page-hero h1{font-size:clamp(3.4rem,17vw,5rem)}
+  .hero{padding-top:3.5rem}
+  .hero h1{font-size:clamp(3.4rem,17vw,5rem)}
 }
 :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 </style>
 </head>
-<body>
 
+<body>
 <header>
   <a class="brand" href="index.html" aria-label="Air One Aero - accueil">
     <img src="mark.png" alt="Air One Aero">
     <span class="mono">Air One Aero</span>
   </a>
   <nav aria-label="Navigation principale">
-    <a href="index.html" class="active">Accueil</a>
-    <a href="sites-applications.html" class="">Web &amp; applications</a>
-    <a href="convoyage.html" class="">Convoyage</a>
+    <a href="index.html">Accueil</a>
+    <a href="sites-applications.html">Web &amp; applications</a>
+    <a href="convoyage.html">Convoyage</a>
     <a href="devis.html" class="nav-cta">Votre projet</a>
   </nav>
 </header>
-<main>
 
+<main>
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow mono">Erwan Cellerier · Air One Aero</span>
+      <span class="eyebrow mono">Air One Aero · Erwan Cellerier</span>
       <h1 class="serif">Plusieurs métiers.<br><span>Une même exigence.</span></h1>
-    </div>
-    <div>
-      <p class="hero-copy">Air One Aero rassemble plusieurs activités autour d'un même principe : des solutions concrètes, pensées avec précision et livrées proprement.</p>
+      <p class="hero-copy">
+        Je conçois des solutions utiles et j'assure des prestations avec la même attention :
+        comprendre le besoin, préparer chaque détail et livrer proprement.
+      </p>
       <div class="hero-meta">
-        <span class="mono">Comprendre</span><span class="rule"></span><span class="mono">Livrer</span>
+        <span class="mono">Concevoir</span><span class="rule"></span><span class="mono">Livrer</span>
       </div>
     </div>
+
+    <figure class="portrait">
+      <img src="erwan.jpg" alt="Erwan Cellerier dans un poste de pilotage">
+      <figcaption class="portrait-caption">
+        <span>Erwan Cellerier · Air One Aero</span>
+        <span class="mono">France</span>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
-<section class="intro">
-  <div class="wrap intro-grid">
-    <article class="intro-card">
-      <span class="eyebrow mono">01 · Web</span>
-      <h2 class="serif">Sites &amp;<br>applications.</h2>
-      <p>Des sites vitrines et des applications web sur mesure pour présenter une activité, simplifier un processus ou créer un véritable outil métier.</p>
-      <a href="sites-applications.html">Découvrir cette activité ↗</a>
-    </article>
-    <article class="intro-card">
-      <span class="eyebrow mono">02 · Transport</span>
-      <h2 class="serif">Convoyage de<br>véhicules.</h2>
-      <p>Une prise en charge planifiée et une livraison à destination pour concessions, loueurs, professionnels et particuliers.</p>
-      <a href="convoyage.html">Découvrir cette activité ↗</a>
-    </article>
-  </div>
-</section>
-
-<section class="section dark" id="projets">
+<section class="activities" id="activites">
   <div class="wrap">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow mono">03 · Réalisations</span>
-        <h2 class="serif">Des projets<br>qui existent vraiment.</h2>
-      </div>
-      <p>Quelques exemples pour voir concrètement le type de projet qui peut être conçu et livré.</p>
-    </div>
-    <div class="project-list">
-      <article class="project">
-        <span class="tag mono">Démonstration · Web</span>
-        <h3 class="serif">Le Comptoir des Remparts</h3>
-        <p>Site vitrine fictif pour un restaurant : menu, réservation, avis, carte et version française / anglaise.</p>
-        <a href="https://boutique-cxx.pages.dev/" target="_blank" rel="noopener">Voir le projet ↗</a>
+    <div class="activities-grid">
+      <article class="activity">
+        <span class="eyebrow mono">01 · Web</span>
+        <h2 class="serif">Sites &amp;<br>applications.</h2>
+        <p>Création de sites vitrines et d'applications web sur mesure, du besoin initial à la mise en ligne.</p>
+        <a href="sites-applications.html">Découvrir cette activité ↗</a>
       </article>
-      <article class="project">
-        <span class="tag mono">En service · Application</span>
-        <h3 class="serif">PréVol</h3>
-        <p>Application de préparation de vol avec calculs et outils pensés pour une utilisation rapide sur le terrain.</p>
-        <a href="https://prevol.pages.dev" target="_blank" rel="noopener">Voir le projet ↗</a>
+
+      <article class="activity">
+        <span class="eyebrow mono">02 · Transport</span>
+        <h2 class="serif">Convoyage de<br>véhicules.</h2>
+        <p>Prise en charge et livraison de véhicules pour professionnels et particuliers, en France entière.</p>
+        <a href="convoyage.html">Découvrir cette activité ↗</a>
       </article>
     </div>
   </div>
 </section>
 
-<section class="section">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow mono">04 · Approche</span>
-        <h2 class="serif">Une méthode<br>simple.</h2>
-      </div>
-      <p>Chaque projet commence par comprendre le besoin avant de choisir les outils, la structure et la forme de la solution.</p>
+<section class="about">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow mono">03 · À propos</span>
+      <h2 class="serif">Une approche<br>très concrète.</h2>
     </div>
-    <div class="cards">
-      <article class="card"><span class="eyebrow mono">01</span><h3 class="serif">Comprendre</h3><p>Objectifs, activité, clientèle, contraintes et contenu sont définis avant la réalisation.</p></article>
-      <article class="card"><span class="eyebrow mono">02</span><h3 class="serif">Concevoir</h3><p>Interface, structure et fonctionnalités sont construits autour de l'usage réel.</p></article>
+    <div class="about-copy">
+      <p>Air One Aero est un cadre simple pour des projets différents : partir d'un besoin réel, construire une solution claire et aller jusqu'au résultat.</p>
+      <p>Le développement web s'appuie sur des projets concrets ; le convoyage repose sur une organisation précise et une communication simple.</p>
+      <a class="about-link" href="devis.html">Parler de votre projet ↗</a>
     </div>
   </div>
 </section>
@@ -286,9 +263,9 @@ footer{background:var(--navy-2);color:var(--cream);padding:2.2rem 0}
   <div class="wrap">
     <div class="cta-box">
       <div>
-        <span class="eyebrow mono">05 · Votre projet</span>
-        <h2 class="serif">Parlons de ce qu'il vous faut.</h2>
-        <p>Quelques minutes suffisent pour décrire votre besoin. Le questionnaire me permet ensuite de préparer une proposition adaptée.</p>
+        <span class="eyebrow mono">04 · Votre projet</span>
+        <h2 class="serif">Qu'est-ce qu'on peut construire ?</h2>
+        <p>Quelques minutes suffisent pour décrire votre besoin. Le questionnaire permet ensuite de poser les bases du projet.</p>
       </div>
       <div class="cta-actions">
         <a class="button" href="devis.html">Décrire mon besoin</a>
@@ -297,7 +274,6 @@ footer{background:var(--navy-2);color:var(--cream);padding:2.2rem 0}
     </div>
   </div>
 </section>
-
 </main>
 
 <footer>
